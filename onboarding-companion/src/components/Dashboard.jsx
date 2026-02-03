@@ -11,9 +11,11 @@ const Dashboard = ({ user, setView }) => {
     ];
 
     const tasks = [
-        { id: 1, title: 'Setup Local Environment', type: 'Critical', duration: '45m', status: 'completed' },
-        { id: 2, title: 'Review Figma "Design System V2"', type: 'Role Specific', duration: '1.5h', status: 'pending' },
-        { id: 3, title: 'Connect with Mentor (Sarah)', type: 'Social', duration: '30m', status: 'pending' },
+        { id: 1, title: 'Set up mac machine', type: 'Critical', duration: 'Done', status: 'completed' },
+        { id: 2, title: 'Complete security training', type: 'Compliance', duration: '1h', status: 'pending' },
+        { id: 3, title: 'Set up Slack on the mac machine', type: 'Setup', duration: '15m', status: 'pending' },
+        { id: 4, title: 'Connect with Mentor (Ganesh)', type: 'Social', duration: '30m', status: 'pending' },
+        { id: 5, title: 'Connect with the practice', type: 'Social', duration: '30m', status: 'pending' },
     ];
 
     const quickDocs = [
@@ -129,9 +131,9 @@ const Dashboard = ({ user, setView }) => {
                         <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-6">Onboarding Buddy</h3>
                         <div className="flex flex-col gap-6">
                             <div className="flex items-center gap-4">
-                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" alt="Sarah" className="w-12 h-12 rounded-full bg-slate-700" />
+                                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Ganesh" alt="Ganesh" className="w-12 h-12 rounded-full bg-slate-700" />
                                 <div>
-                                    <div className="font-semibold text-white">Sarah Connor</div>
+                                    <div className="font-semibold text-white">Ganesh</div>
                                     <div className="text-xs text-emerald-400 flex items-center gap-1">
                                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Online Now
                                     </div>
