@@ -15,7 +15,7 @@ const Settings = () => {
                     </div>
                     <div className="p-6 space-y-4">
                         <div className="flex items-center gap-4">
-                            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-emerald-400 to-cyan-500 flex items-center justify-center text-slate-900 font-bold text-xl">JD</div>
+                            <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-emerald-400 to-cyan-500 flex items-center justify-center text-slate-900 font-bold text-xl">P</div>
                             <div>
                                 <button className="text-sm text-blue-400 hover:text-blue-300">Change Avatar</button>
                             </div>
@@ -23,7 +23,7 @@ const Settings = () => {
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <label className="text-xs text-slate-500 uppercase font-bold tracking-wider">Display Name</label>
-                                <input type="text" value="Jane Doe" className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" readOnly />
+                                <input type="text" value="Pranav" className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" readOnly />
                             </div>
                             <div>
                                 <label className="text-xs text-slate-500 uppercase font-bold tracking-wider">Role</label>

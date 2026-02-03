@@ -26,8 +26,8 @@ const Sidebar = ({ currentView, setView }) => {
                         key={item.id}
                         onClick={() => setView(item.id)}
                         className={`w-full text-left px-4 py-2.5 rounded-lg flex items-center gap-3 transition-all duration-200 font-medium ${currentView === item.id
-                                ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30'
-                                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
+                            ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30'
+                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
                             }`}
                     >
                         <item.icon size={18} />
@@ -39,9 +39,9 @@ const Sidebar = ({ currentView, setView }) => {
             {/* User Profile */}
             <div className="mt-auto pt-6 border-t border-slate-800/50 px-2">
                 <button className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-800 transition-colors w-full">
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-emerald-400 to-cyan-500 flex items-center justify-center text-slate-900 font-bold text-sm shadow-lg">JD</div>
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-emerald-400 to-cyan-500 flex items-center justify-center text-slate-900 font-bold text-sm shadow-lg">P</div>
                     <div className="text-left flex-1">
-                        <div className="text-sm font-semibold text-white">Jane Doe</div>
+                        <div className="text-sm font-semibold text-white">Pranav</div>
                         <div className="text-xs text-slate-500">Backend Engineer</div>
                     </div>
                     <div className="text-slate-500 text-xs">•••</div>

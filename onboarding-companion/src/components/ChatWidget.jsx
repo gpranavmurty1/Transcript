@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 const ChatWidget = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { id: 1, sender: 'bot', text: 'Hi Jane! I noticed you are setting up your local environment. Need help with the `.env` variables?' }
+        { id: 1, sender: 'bot', text: 'Hi Pranav! I noticed you are setting up your local environment. Need help with the `.env` variables?' }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
