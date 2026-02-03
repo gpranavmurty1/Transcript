@@ -10,7 +10,7 @@ import Settings from './components/Settings';
 function App() {
   const [user, setUser] = useState({
     name: 'Pranav',
-    role: 'Backend Engineer',
+    role: 'Product Manager',
     tenure: 'Day 2'
   });
 

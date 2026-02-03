@@ -42,7 +42,7 @@ const Sidebar = ({ currentView, setView }) => {
                     <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-emerald-400 to-cyan-500 flex items-center justify-center text-slate-900 font-bold text-sm shadow-lg">P</div>
                     <div className="text-left flex-1">
                         <div className="text-sm font-semibold text-white">Pranav</div>
-                        <div className="text-xs text-slate-500">Backend Engineer</div>
+                        <div className="text-xs text-slate-500">Product Manager</div>
                     </div>
                     <div className="text-slate-500 text-xs">•••</div>
                 </button>

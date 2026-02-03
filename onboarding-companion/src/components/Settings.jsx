@@ -27,7 +27,7 @@ const Settings = () => {
                             </div>
                             <div>
                                 <label className="text-xs text-slate-500 uppercase font-bold tracking-wider">Role</label>
-                                <input type="text" value="Backend Engineer" className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" readOnly />
+                                <input type="text" value="Product Manager" className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:border-blue-500 focus:outline-none" readOnly />
                             </div>
                         </div>
                     </div>
