@@ -14,8 +14,8 @@ const Sidebar = ({ currentView, setView }) => {
         <div className="w-64 bg-slate-900 border-r border-slate-800 h-screen sticky top-0 flex flex-col pt-8 pb-6 px-4 shrink-0 transition-all duration-300 ease-in-out">
             {/* Brand */}
             <div className="mb-10 px-4 flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-900/50">C</div>
-                <div className="font-bold text-lg tracking-tight text-white">Companion</div>
+                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-900/50">OC</div>
+                <div className="font-bold text-lg tracking-tight text-white leading-tight">Onboarding<br />Companion</div>
             </div>
 
             {/* Navigation */}
