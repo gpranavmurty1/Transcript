@@ -1,46 +1,125 @@
 import React from 'react';
-import { Mail, MessageSquare } from 'lucide-react';
+import { Mail, Globe } from 'lucide-react';
+
+const productTeam = [
+    {
+        name: 'Kshitij Kumar',
+        region: 'India',
+        role: 'Senior Product Manager',
+        email: 'kshitij.kumar@everest.engineering',
+        bio: 'Extensive knowledge in Startups, Scaleups, and Enterprise accounts.',
+        avatar: 'Kshitij',
+    },
+    {
+        name: 'Sruthi Suresh Babu',
+        region: 'UAE',
+        role: 'Senior Product Manager',
+        email: 'sruthi@everest.engineering',
+        bio: 'Extensive knowledge in Enterprise accounts and Discovery workshops.',
+        avatar: 'Sruthi',
+    },
+    {
+        name: 'Gopalkrishna Bhat',
+        region: 'India',
+        role: 'Product Manager',
+        email: 'gopalkrishna.b@everest.engineering',
+        bio: '8 years industry experience. Excellent with leading small teams.',
+        avatar: 'Gopalkrishna',
+    },
+];
+
+const crewLeads = [
+    {
+        name: 'Ravinder Deolal',
+        region: 'India',
+        role: 'Enterprise Crew Lead',
+        email: 'ravinder.deolal@everest.engineering',
+        bio: 'Head of Enterprise portfolio.',
+        avatar: 'Ravinder',
+    },
+    {
+        name: 'Ashok Kanna',
+        region: 'India',
+        role: 'Scale Up Crew Lead',
+        email: 'ashok.gk@everest.engineering',
+        bio: '8 years industry experience. Excellent with leading small teams.',
+        avatar: 'Ashok',
+    },
+];
+
+const regionFlag = (region) => {
+    if (region === 'India') return '🇮🇳';
+    if (region === 'UAE') return '🇦🇪';
+    return '🌍';
+};
+
+const MentorCard = ({ person }) => (
+    <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 flex flex-col gap-4 hover:border-slate-600 hover:shadow-lg hover:shadow-black/20 transition-all duration-200 group">
+        <div className="flex items-start gap-4">
+            <img
+                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${person.avatar}`}
+                alt={person.name}
+                className="w-14 h-14 rounded-full bg-slate-800 shrink-0"
+            />
+            <div className="flex-1 min-w-0">
+                <div className="font-semibold text-lg text-white leading-tight mb-0.5 group-hover:text-blue-400 transition-colors truncate">
+                    {person.name}
+                </div>
+                <div className="text-sm text-blue-400 font-medium mb-1">{person.role}</div>
+                <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                    <Globe size={12} />
+                    <span>{regionFlag(person.region)} {person.region}</span>
+                </div>
+            </div>
+        </div>
+
+        <p className="text-sm text-slate-400 leading-relaxed border-t border-slate-800 pt-4">
+            {person.bio}
+        </p>
+
+        <a
+            href={`mailto:${person.email}`}
+            className="w-full py-2 rounded-xl bg-slate-800 hover:bg-blue-600 text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200 flex items-center justify-center gap-2"
+        >
+            <Mail size={14} />
+            {person.email}
+        </a>
+    </div>
+);
+
+const SectionHeader = ({ title, count }) => (
+    <div className="flex items-center gap-3 mb-6">
+        <h2 className="text-xl font-bold text-white">{title}</h2>
+        <span className="px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 text-xs font-semibold border border-blue-500/20">
+            {count}
+        </span>
+    </div>
+);
 
 const TeamDirectory = () => {
-    const team = [
-        { name: 'Sarah Connor', role: 'Staff Engineer (Your Mentor)', status: 'online', avatar: 'Sarah' },
-        { name: 'Melanie (CTO)', role: 'Chief Technology Officer', status: 'busy', avatar: 'Melanie' },
-        { name: 'John Smith', role: 'Product Manager', status: 'offline', avatar: 'John' },
-        { name: 'Alice Chen', role: 'Frontend Lead', status: 'online', avatar: 'Alice' },
-        { name: 'Bob Wilson', role: 'DevOps Engineer', status: 'offline', avatar: 'Bob' },
-    ];
-
     return (
         <div className="p-10 max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-white mb-2">Team Directory</h1>
-            <p className="text-slate-400 mb-10">Key people for your onboarding journey.</p>
+            <h1 className="text-3xl font-bold text-white mb-2">Mentor Directory</h1>
+            <p className="text-slate-400 mb-10">Your go-to people for guidance throughout your onboarding journey.</p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {team.map((person, idx) => (
-                    <div key={idx} className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 flex items-start gap-4 hover:border-slate-700 transition-colors">
-                        <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${person.avatar}`} alt={person.name} className="w-14 h-14 rounded-full bg-slate-800" />
-                        <div className="flex-1">
-                            <div className="font-semibold text-lg text-white mb-1">{person.name}</div>
-                            <div className="text-sm text-slate-400 mb-2">{person.role}</div>
+            {/* Product Team */}
+            <div className="mb-12">
+                <SectionHeader title="Product Team" count={productTeam.length} />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {productTeam.map((person) => (
+                        <MentorCard key={person.email} person={person} />
+                    ))}
+                </div>
+            </div>
 
-                            <div className="flex items-center gap-2 mb-4">
-                                <span className={`w-2 h-2 rounded-full ${person.status === 'online' ? 'bg-emerald-500' :
-                                        person.status === 'busy' ? 'bg-amber-500' : 'bg-slate-600'
-                                    }`}></span>
-                                <span className="text-xs text-slate-500 capitalize">{person.status}</span>
-                            </div>
-
-                            <div className="flex gap-2">
-                                <button className="flex-1 py-1.5 rounded-lg bg-slate-800 text-xs font-medium text-slate-300 hover:bg-slate-700 flex items-center justify-center gap-2">
-                                    <MessageSquare size={14} /> Chat
-                                </button>
-                                <button className="flex-1 py-1.5 rounded-lg bg-slate-800 text-xs font-medium text-slate-300 hover:bg-slate-700 flex items-center justify-center gap-2">
-                                    <Mail size={14} /> Email
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+            {/* Crew Leads */}
+            <div>
+                <SectionHeader title="Crew Leads" count={crewLeads.length} />
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {crewLeads.map((person) => (
+                        <MentorCard key={person.email} person={person} />
+                    ))}
+                </div>
             </div>
         </div>
     );
