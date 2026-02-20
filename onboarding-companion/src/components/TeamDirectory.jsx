@@ -11,6 +11,7 @@ const productTeam = [
         email: 'kshitij.kumar@everest.engineering',
         bio: 'Extensive knowledge in Startups, Scaleups, and Enterprise accounts.',
         avatar: 'Kshitij',
+        gender: 'male',
         slackUsername: 'kshitij.kumar',
     },
     {
@@ -20,6 +21,7 @@ const productTeam = [
         email: 'sruthi@everest.engineering',
         bio: 'Extensive knowledge in Enterprise accounts and Discovery workshops.',
         avatar: 'Sruthi',
+        gender: 'female',
         slackUsername: 'shruti.babu',
     },
     {
@@ -29,6 +31,7 @@ const productTeam = [
         email: 'gopalkrishna.b@everest.engineering',
         bio: '8 years industry experience. Excellent with leading small teams.',
         avatar: 'Gopalkrishna',
+        gender: 'male',
         slackUsername: 'gopal',
     },
 ];
@@ -41,6 +44,7 @@ const crewLeads = [
         email: 'ravinder.deolal@everest.engineering',
         bio: 'Head of Enterprise portfolio.',
         avatar: 'Ravinder',
+        gender: 'male',
         slackUsername: 'rav',
     },
     {
@@ -50,6 +54,7 @@ const crewLeads = [
         email: 'ashok.gk@everest.engineering',
         bio: 'Head of Scale up portfolio.',
         avatar: 'Ashok',
+        gender: 'male',
         slackUsername: 'ashok',
     },
 ];
@@ -78,7 +83,7 @@ const MentorCard = ({ person }) => (
     <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 flex flex-col gap-4 hover:border-slate-600 hover:shadow-lg hover:shadow-black/20 transition-all duration-200 group">
         <div className="flex items-start gap-4">
             <img
-                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${person.avatar}`}
+                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${person.avatar}&sex[]=${person.gender}`}
                 alt={person.name}
                 className="w-14 h-14 rounded-full bg-slate-800 shrink-0"
             />
