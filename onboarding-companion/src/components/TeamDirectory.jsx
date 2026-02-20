@@ -44,11 +44,11 @@ const crewLeads = [
         slackUsername: 'rav',
     },
     {
-        name: 'Ashok Kanna',
+        name: 'Ashok Kannan',
         region: 'India',
         role: 'Scale Up Crew Lead',
         email: 'ashok.gk@everest.engineering',
-        bio: '8 years industry experience. Excellent with leading small teams.',
+        bio: 'Head of Scale up portfolio.',
         avatar: 'Ashok',
         slackUsername: 'ashok',
     },
