@@ -1,6 +1,8 @@
 import React from 'react';
 import { Mail, Globe } from 'lucide-react';
 
+const SLACK_WORKSPACE = 'https://everest-engineering.slack.com/team';
+
 const productTeam = [
     {
         name: 'Kshitij Kumar',
@@ -9,6 +11,7 @@ const productTeam = [
         email: 'kshitij.kumar@everest.engineering',
         bio: 'Extensive knowledge in Startups, Scaleups, and Enterprise accounts.',
         avatar: 'Kshitij',
+        slackUsername: 'kshitij.kumar',
     },
     {
         name: 'Sruthi Suresh Babu',
@@ -17,6 +20,7 @@ const productTeam = [
         email: 'sruthi@everest.engineering',
         bio: 'Extensive knowledge in Enterprise accounts and Discovery workshops.',
         avatar: 'Sruthi',
+        slackUsername: 'shruti.babu',
     },
     {
         name: 'Gopalkrishna Bhat',
@@ -25,6 +29,7 @@ const productTeam = [
         email: 'gopalkrishna.b@everest.engineering',
         bio: '8 years industry experience. Excellent with leading small teams.',
         avatar: 'Gopalkrishna',
+        slackUsername: 'gopal',
     },
 ];
 
@@ -36,6 +41,7 @@ const crewLeads = [
         email: 'ravinder.deolal@everest.engineering',
         bio: 'Head of Enterprise portfolio.',
         avatar: 'Ravinder',
+        slackUsername: 'rav',
     },
     {
         name: 'Ashok Kanna',
@@ -44,6 +50,7 @@ const crewLeads = [
         email: 'ashok.gk@everest.engineering',
         bio: '8 years industry experience. Excellent with leading small teams.',
         avatar: 'Ashok',
+        slackUsername: 'ashok',
     },
 ];
 
@@ -52,6 +59,20 @@ const regionFlag = (region) => {
     if (region === 'UAE') return '🇦🇪';
     return '🌍';
 };
+
+// Slack logo SVG
+const SlackIcon = () => (
+    <svg width="14" height="14" viewBox="0 0 122.8 122.8" xmlns="http://www.w3.org/2000/svg">
+        <path d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9z" fill="currentColor" />
+        <path d="M32.3 77.6c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z" fill="currentColor" />
+        <path d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2z" fill="currentColor" />
+        <path d="M45.2 32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z" fill="currentColor" />
+        <path d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2z" fill="currentColor" />
+        <path d="M90.5 45.2c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C64.7 5.8 70.5 0 77.6 0s12.9 5.8 12.9 12.9v32.3z" fill="currentColor" />
+        <path d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-12.9-5.8-12.9-12.9V97h12.9z" fill="currentColor" />
+        <path d="M77.6 90.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z" fill="currentColor" />
+    </svg>
+);
 
 const MentorCard = ({ person }) => (
     <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 flex flex-col gap-4 hover:border-slate-600 hover:shadow-lg hover:shadow-black/20 transition-all duration-200 group">
@@ -77,13 +98,25 @@ const MentorCard = ({ person }) => (
             {person.bio}
         </p>
 
-        <a
-            href={`mailto:${person.email}`}
-            className="w-full py-2 rounded-xl bg-slate-800 hover:bg-blue-600 text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200 flex items-center justify-center gap-2"
-        >
-            <Mail size={14} />
-            {person.email}
-        </a>
+        {/* Action Buttons */}
+        <div className="flex gap-2">
+            <a
+                href={`mailto:${person.email}`}
+                className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-blue-600 text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200 flex items-center justify-center gap-2"
+            >
+                <Mail size={14} />
+                Email
+            </a>
+            <a
+                href={`${SLACK_WORKSPACE}/${person.slackUsername}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-[#4A154B] text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200 flex items-center justify-center gap-2"
+            >
+                <SlackIcon />
+                Slack
+            </a>
+        </div>
     </div>
 );
 
