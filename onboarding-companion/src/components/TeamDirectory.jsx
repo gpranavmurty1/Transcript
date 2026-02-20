@@ -1,71 +1,16 @@
-import React from 'react';
-import { Mail, Globe } from 'lucide-react';
+import React, { useState } from 'react';
+import { Mail, Globe, ChevronDown, ChevronUp } from 'lucide-react';
+import { crews, practiceHeads, mentors } from '../config/directory';
 
 const SLACK_WORKSPACE = 'https://everest-engineering.slack.com/team';
 
-const productTeam = [
-    {
-        name: 'Kshitij Kumar',
-        region: 'India',
-        role: 'Senior Product Manager',
-        email: 'kshitij.kumar@everest.engineering',
-        bio: 'Extensive knowledge in Startups, Scaleups, and Enterprise accounts.',
-        avatar: 'Kshitij',
-        gender: 'male',
-        slackUsername: 'kshitij.kumar',
-    },
-    {
-        name: 'Sruthi Suresh Babu',
-        region: 'UAE',
-        role: 'Senior Product Manager',
-        email: 'sruthi@everest.engineering',
-        bio: 'Extensive knowledge in Enterprise accounts and Discovery workshops.',
-        avatar: 'Sruthi',
-        gender: 'female',
-        slackUsername: 'shruti.babu',
-    },
-    {
-        name: 'Gopalkrishna Bhat',
-        region: 'India',
-        role: 'Product Manager',
-        email: 'gopalkrishna.b@everest.engineering',
-        bio: '8 years industry experience. Excellent with leading small teams.',
-        avatar: 'Gopalkrishna',
-        gender: 'male',
-        slackUsername: 'gopal',
-    },
-];
-
-const crewLeads = [
-    {
-        name: 'Ravinder Deolal',
-        region: 'India',
-        role: 'Enterprise Crew Lead',
-        email: 'ravinder.deolal@everest.engineering',
-        bio: 'Head of Enterprise portfolio.',
-        avatar: 'Ravinder',
-        gender: 'male',
-        slackUsername: 'rav',
-    },
-    {
-        name: 'Ashok Kannan',
-        region: 'India',
-        role: 'Scale Up Crew Lead',
-        email: 'ashok.gk@everest.engineering',
-        bio: 'Head of Scale up portfolio.',
-        avatar: 'Ashok',
-        gender: 'male',
-        slackUsername: 'ashok',
-    },
-];
-
 const regionFlag = (region) => {
     if (region === 'India') return '🇮🇳';
+    if (region === 'Australia') return '🇦🇺';
     if (region === 'UAE') return '🇦🇪';
     return '🌍';
 };
 
-// Slack logo SVG
 const SlackIcon = () => (
     <svg width="14" height="14" viewBox="0 0 122.8 122.8" xmlns="http://www.w3.org/2000/svg">
         <path d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9z" fill="currentColor" />
@@ -79,54 +24,82 @@ const SlackIcon = () => (
     </svg>
 );
 
-const MentorCard = ({ person }) => (
-    <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-6 flex flex-col gap-4 hover:border-slate-600 hover:shadow-lg hover:shadow-black/20 transition-all duration-200 group">
-        <div className="flex items-start gap-4">
-            <img
-                src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${person.avatar}&sex[]=${person.gender}`}
-                alt={person.name}
-                className="w-14 h-14 rounded-full bg-slate-800 shrink-0"
-            />
-            <div className="flex-1 min-w-0">
-                <div className="font-semibold text-lg text-white leading-tight mb-0.5 group-hover:text-blue-400 transition-colors truncate">
-                    {person.name}
+const ContactCard = ({ person, compact = false }) => {
+    const hasContact = person.email || person.slackUsername;
+    const isTBD = person.name === 'TBD';
+
+    if (isTBD) {
+        return (
+            <div className="bg-slate-900/20 border border-slate-800/40 border-dashed rounded-2xl p-5 flex items-center gap-3 opacity-50">
+                <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-600 text-xs font-bold shrink-0">
+                    TBD
                 </div>
-                <div className="text-sm text-blue-400 font-medium mb-1">{person.role}</div>
-                <div className="flex items-center gap-1.5 text-xs text-slate-500">
-                    <Globe size={12} />
-                    <span>{regionFlag(person.region)} {person.region}</span>
+                <div>
+                    <div className="text-slate-500 text-sm font-medium">{person.role}</div>
+                    <div className="flex items-center gap-1 text-xs text-slate-600 mt-0.5">
+                        <Globe size={10} />
+                        {regionFlag(person.region)} {person.region}
+                    </div>
                 </div>
             </div>
+        );
+    }
+
+    return (
+        <div className={`bg-slate-900/40 border border-slate-800 rounded-2xl transition-all duration-200 hover:border-slate-600 hover:shadow-lg hover:shadow-black/20 group ${compact ? 'p-4' : 'p-5'}`}>
+            <div className="flex items-start gap-3 mb-3">
+                <img
+                    src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${person.avatar}&sex[]=${person.gender}`}
+                    alt={person.name}
+                    className={`rounded-full bg-slate-800 shrink-0 ${compact ? 'w-10 h-10' : 'w-12 h-12'}`}
+                />
+                <div className="flex-1 min-w-0">
+                    <div className="font-semibold text-white text-sm leading-tight group-hover:text-blue-400 transition-colors truncate">
+                        {person.name}
+                    </div>
+                    <div className="text-xs text-blue-400 font-medium mt-0.5 truncate">{person.role}</div>
+                    <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+                        <Globe size={10} />
+                        {regionFlag(person.region)} {person.region}
+                    </div>
+                </div>
+            </div>
+
+            {!compact && person.bio && (
+                <p className="text-xs text-slate-500 leading-relaxed mb-3 border-t border-slate-800 pt-3">
+                    {person.bio}
+                </p>
+            )}
+
+            {hasContact && (
+                <div className="flex gap-2">
+                    {person.email && (
+                        <a
+                            href={`mailto:${person.email}`}
+                            className="flex-1 py-1.5 rounded-lg bg-slate-800 hover:bg-blue-600 text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center justify-center gap-1.5"
+                        >
+                            <Mail size={12} /> Email
+                        </a>
+                    )}
+                    {person.slackUsername && (
+                        <a
+                            href={`${SLACK_WORKSPACE}/${person.slackUsername}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 py-1.5 rounded-lg bg-slate-800 hover:bg-[#4A154B] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center justify-center gap-1.5"
+                        >
+                            <SlackIcon /> Slack
+                        </a>
+                    )}
+                </div>
+            )}
         </div>
+    );
+};
 
-        <p className="text-sm text-slate-400 leading-relaxed border-t border-slate-800 pt-4">
-            {person.bio}
-        </p>
-
-        {/* Action Buttons */}
-        <div className="flex gap-2">
-            <a
-                href={`mailto:${person.email}`}
-                className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-blue-600 text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200 flex items-center justify-center gap-2"
-            >
-                <Mail size={14} />
-                Email
-            </a>
-            <a
-                href={`${SLACK_WORKSPACE}/${person.slackUsername}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex-1 py-2 rounded-xl bg-slate-800 hover:bg-[#4A154B] text-xs font-semibold text-slate-300 hover:text-white transition-all duration-200 flex items-center justify-center gap-2"
-            >
-                <SlackIcon />
-                Slack
-            </a>
-        </div>
-    </div>
-);
-
-const SectionHeader = ({ title, count }) => (
-    <div className="flex items-center gap-3 mb-6">
+const SectionHeader = ({ title, count, icon }) => (
+    <div className="flex items-center gap-3 mb-5">
+        <span className="text-xl">{icon}</span>
         <h2 className="text-xl font-bold text-white">{title}</h2>
         <span className="px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 text-xs font-semibold border border-blue-500/20">
             {count}
@@ -134,30 +107,81 @@ const SectionHeader = ({ title, count }) => (
     </div>
 );
 
-const TeamDirectory = () => {
+const CrewSection = ({ crew }) => {
+    const [open, setOpen] = useState(true);
+    const activeleads = crew.leads.filter((l) => l.name !== 'TBD');
+    const tbdLeads = crew.leads.filter((l) => l.name === 'TBD');
+
+    return (
+        <div className="bg-slate-900/20 border border-slate-800 rounded-2xl p-6 mb-4">
+            <button
+                onClick={() => setOpen((p) => !p)}
+                className="w-full flex items-center justify-between mb-1"
+            >
+                <div className="flex items-center gap-3">
+                    <h3 className="text-lg font-bold text-white">{crew.name}</h3>
+                    <span className="text-xs font-semibold text-slate-500 border border-slate-700 rounded-full px-2 py-0.5">
+                        {crew.leads.length} leads
+                    </span>
+                </div>
+                {open ? <ChevronUp size={16} className="text-slate-500" /> : <ChevronDown size={16} className="text-slate-500" />}
+            </button>
+            <p className="text-sm text-slate-500 mb-4 text-left">{crew.description}</p>
+
+            {open && (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {activeleads.map((lead) => (
+                        <ContactCard key={lead.email || lead.name} person={lead} compact />
+                    ))}
+                    {tbdLeads.map((lead, i) => (
+                        <ContactCard key={`tbd-${i}`} person={lead} compact />
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+const TeamDirectory = ({ role }) => {
+    const practiceHead = practiceHeads[role];
+    const roleMentors = mentors[role] || [];
+
     return (
         <div className="p-10 max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-white mb-2">Mentor Directory</h1>
-            <p className="text-slate-400 mb-10">Your go-to people for guidance throughout your onboarding journey.</p>
+            <h1 className="text-3xl font-bold text-white mb-2">Team Directory</h1>
+            <p className="text-slate-400 mb-10">Your key contacts for onboarding — mentors, crew leads, and practice heads.</p>
 
-            {/* Product Team */}
+            {/* Practice Head */}
+            {practiceHead && (
+                <div className="mb-12">
+                    <SectionHeader title="Practice Head" count={1} icon="⭐" />
+                    <div className="max-w-xs">
+                        <ContactCard person={practiceHead} />
+                    </div>
+                </div>
+            )}
+
+            {/* Mentors (role-specific) */}
+            {roleMentors.length > 0 && (
+                <div className="mb-12">
+                    <SectionHeader title="Mentors" count={roleMentors.length} icon="🎓" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        {roleMentors.map((m) => (
+                            <ContactCard key={m.email} person={m} />
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Crew Leads — all three crews */}
             <div className="mb-12">
-                <SectionHeader title="Product Team" count={productTeam.length} />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {productTeam.map((person) => (
-                        <MentorCard key={person.email} person={person} />
-                    ))}
-                </div>
-            </div>
-
-            {/* Crew Leads */}
-            <div>
-                <SectionHeader title="Crew Leads" count={crewLeads.length} />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {crewLeads.map((person) => (
-                        <MentorCard key={person.email} person={person} />
-                    ))}
-                </div>
+                <SectionHeader title="Crew Leads" count={crews.reduce((a, c) => a + c.leads.length, 0)} icon="👥" />
+                <p className="text-slate-500 text-sm mb-6 -mt-2">
+                    Each crew has two leads — one in India 🇮🇳 and one in Australia 🇦🇺.
+                </p>
+                {crews.map((crew) => (
+                    <CrewSection key={crew.name} crew={crew} />
+                ))}
             </div>
         </div>
     );
