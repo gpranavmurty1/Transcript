@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './firebase';
+import { useUserProfile } from './hooks/useUserProfile';
+import { useMilestoneProgress } from './hooks/useMilestoneProgress';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import ChatWidget from './components/ChatWidget';
@@ -9,45 +11,44 @@ import Resources from './components/Resources';
 import TeamDirectory from './components/TeamDirectory';
 import Settings from './components/Settings';
 import Login from './components/Login';
+import RoleSelector from './components/RoleSelector';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [firebaseUser, setFirebaseUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [user, setUser] = useState(null);
   const [currentView, setView] = useState('dashboard');
+
+  // Firebase user profile (role) from Firestore
+  const { role, profileLoading, saveRole } = useUserProfile(firebaseUser);
+
+  // Milestone progress from Firestore
+  const milestoneProgress = useMilestoneProgress(firebaseUser);
 
   // Listen to Firebase auth state — persists login across page refreshes
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        setUser({
-          name: firebaseUser.displayName || 'User',
-          email: firebaseUser.email,
-          photoURL: firebaseUser.photoURL,
-          role: 'Team Member',
-          tenure: 'Day 1',
-        });
-        setIsAuthenticated(true);
-      } else {
-        setUser(null);
-        setIsAuthenticated(false);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setFirebaseUser(user || null);
       setAuthLoading(false);
     });
     return () => unsubscribe();
   }, []);
 
-  const handleLogin = (selectedUser) => {
-    setUser(selectedUser);
-    setIsAuthenticated(true);
-  };
-
   const handleLogout = () => {
     signOut(auth);
+    setFirebaseUser(null);
   };
 
-  // Show a blank screen while Firebase checks existing session
-  if (authLoading) {
+  // Build user object for display (name, email, photoURL + role from Firestore)
+  const user = firebaseUser ? {
+    name: firebaseUser.displayName || 'User',
+    email: firebaseUser.email,
+    photoURL: firebaseUser.photoURL,
+    role: role || 'Team Member',
+    tenure: 'Day 1',
+  } : null;
+
+  // Loading: Firebase checking session or Firestore loading role
+  if (authLoading || (firebaseUser && profileLoading)) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -63,18 +64,24 @@ function App() {
     );
   }
 
-  if (!isAuthenticated) {
-    return <Login onLogin={handleLogin} />;
+  // Not logged in
+  if (!firebaseUser) {
+    return <Login />;
+  }
+
+  // Logged in but no role yet — show one-time role selector
+  if (!role) {
+    return <RoleSelector user={firebaseUser} onRoleSelected={saveRole} />;
   }
 
   const renderView = () => {
     switch (currentView) {
-      case 'dashboard': return <Dashboard user={user} setView={setView} />;
-      case 'journey': return <JourneyMap />;
-      case 'resources': return <Resources />;
-      case 'team': return <TeamDirectory />;
+      case 'dashboard': return <Dashboard user={user} setView={setView} milestoneProgress={milestoneProgress} role={role} />;
+      case 'journey': return <JourneyMap role={role} milestoneProgress={milestoneProgress} />;
+      case 'resources': return <Resources role={role} />;
+      case 'team': return <TeamDirectory role={role} />;
       case 'settings': return <Settings onLogout={handleLogout} />;
-      default: return <Dashboard user={user} setView={setView} />;
+      default: return <Dashboard user={user} setView={setView} milestoneProgress={milestoneProgress} role={role} />;
     }
   };
 

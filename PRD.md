@@ -1,59 +1,162 @@
 # Product Requirements Document (PRD): Smart Onboarding Companion
 
-**Date:** January 22, 2026  
-**Status:** Draft  
-**Based on:** Executive Sync Meeting (Sam, Tim, Melanie)
+**Date:** February 20, 2026
+**Status:** Refined Draft
+**Based on:** Executive Sync Meeting (Sam, Tim, Melanie) + Analyst Review Session
+
+---
 
 ## 1. Executive Summary
-The company is currently facing a critical bottleneck in new hire onboarding. Engineers are taking nearly five weeks to reach productivity, primarily due to overwhelmed "information dumping" and social anxiety around asking questions.
-The solution is to build a **"Smart Onboarding Companion"**—an intelligent, adaptive agent that guides new hires through their specific journey, providing context-aware information and a safe space for questions.
+
+The company faces a critical bottleneck in new hire onboarding across Engineering, Product, and Design. New hires take an average of five weeks to contribute meaningfully, compounded by remote isolation, fragmented tooling, and generic onboarding packs.
+
+The solution is a **"Smart Onboarding Companion"** — a role-aware, adaptive guide that structures a new hire's first two weeks with clear milestones, curated resources from Notion, and prompted connections to the right people at the right time.
+
+---
 
 ## 2. Problem Statement
-*   **Prolonged Time-to-Productivity:** It takes new engineers ~5 weeks to ship their first meaningful feature.
-*   **The "Wiki Trap" (Information Overload):** Employees have access to thousands of documents (Notion, Drive, Jira) but lack the **context** to know what is relevant versus obsolete (e.g., reading a 2023 roadmap in 2026).
-*   **Social Friction:** New hires suffer from "social anxiety," fearing they will look incompetent if they ask basic questions (e.g., "Where is the VPN config?").
-*   **Static & Inefficient Processes:** The current "Welcome Pack" is generic, treating unique roles (like Marketing Managers and Backend Engineers) the same way.
+
+- **Prolonged Time-to-Productivity:** New hires take an average of five weeks to contribute meaningfully, a delay largely attributed to the lack of structured guidance.
+- **Remote Isolation & Fragmented Onboarding:** In a remote-first environment, new roles like Product Managers lack a clear roadmap of stakeholders or resources. Onboarding is often relegated to a static email checklist, forcing hires to navigate the organization through self-directed Slack outreach rather than guided integration.
+- **The "Wiki Trap" (Information Overload):** Employees have access to thousands of documents on Notion but lack the **context** to know what is relevant versus obsolete.
+- **Social Friction:** New hires suffer from "social anxiety," fearing they will look incompetent if they ask basic questions.
+- **Static & Inefficient Processes:** The current "Welcome Pack" is generic, treating Engineering, Product, and Design roles identically.
+
+---
 
 ## 3. Product Vision
-A "Companion, not a Portal." The product serves as a smart guide that understands:
-1.  **Who the user is** (Role: Product Designer, Backend Dev, etc.)
-2.  **Where they are in their journey** (Scenario: "It's Day 2")
-3.  **What they already know** (Skill Level: Skips React basics if the user is an expert)
 
-The ultimate goal is to shift the user experience from *"I have the links, but I'm lost"* to *"I have a guide that prioritizes my focus."*
+**"A Companion, not a Portal."**
 
-## 4. Key Features & Requirements
+The product understands:
+1. **Who the user is** — Role: Engineer, Product Manager, or Designer
+2. **Where they are in their journey** — Day 1, Week 1, or Week 2
+3. **What they need to do next** — Guided, role-specific milestones, not a dump of links
 
-### 4.1. Adaptive Learning Paths
-*   **Role-Based Customization:** The system must differentiate content delivery based on the user's specific job title.
-    *   *Example:* A Product Designer sees Figma files on Day 2; a Backend Engineer sees API docs.
-*   **Dynamic Skill Assessment:** The guide should adapt to the user's proficiency, skipping introductory material for established skills (e.g., skipping React basics for a senior React dev).
+The goal: shift new hires from *"I have the links, but I'm lost"* to *"I know exactly what to do today."*
 
-### 4.2. Context-Aware Guidance
-*   **Time-Based Triggers:** The system understands the specific "day" or "week" of the user's tenure and suggests appropriate tasks (e.g., "Don't worry about API docs yet, just focus on setup").
-*   **Curated Navigation:** Instead of a full search index, the system highlights the "Holy Grail" documents and suppresses known "trash" or obsolete files.
+---
 
-### 4.3. Conversational AI Companion
-*   **"Safe Space" Q&A:** An AI interface that answers "trivial" questions instantly, removing the fear of judgement or "looking stupid" to a human manager.
-*   **Contextual Answers:** Answers must be specific to the company infrastructure (VPN configs, internal tools).
+## 4. Target Audience
 
-## 5. Success Metrics (KPIs)
-*   **Time-to-Productivity:** Decrease the average time to ship the first feature (Baseline: 5 weeks).
-*   **New Hire Confidence:** Qualitative improvement in 30-day HR check-in feedback.
-*   **Senior Dev Interruptions:** Reduction in the frequency of basic help requests sent to senior engineering staff.
+| Role | Included in MVP |
+|------|----------------|
+| Engineering | ✅ Yes |
+| Product Management | ✅ Yes |
+| Design | ✅ Yes |
+| Other roles (HR, Finance, etc.) | ❌ Not in MVP |
 
-## 6. Stakeholders
-*   **Sam (CEO):** Sponsor; focused on ROI and growth.
-*   **Tim (HR):** Stakeholder; focused on retention and reducing new hire anxiety.
-*   **Melanie (CTO):** Stakeholder; focused on technical execution and implementation.
+---
 
-## 7. Risks & Mitigations
-*   **Data Integrity ("Garbage In, Garbage Out"):**
-    *   *Risk:* Melanie identified that many existing docs are "trash" or obsolete. An AI trained on this will hallucinate or provide incorrect info.
-    *   *Mitigation:* A mandatory "Data Curation" phase must precede AI ingestion. We must flag "Holy Grail" docs and archive obsolete ones manually or via heuristics.
-*   **Cultural Isolation:**
-    *   *Risk:* By removing the need to ask humans "stupid questions," we may accidentally remove opportunities for social bonding, leading to technically productive but culturally isolated engineers.
-    *   *Mitigation:* The Companion should be programmed to *encourage* human interaction for subjective or complex topics (e.g., "Ask Sarah about the history of this module").
-*   **Maintenance Overhead:**
-    *   *Risk:* The Companion becoming another "outdated artifact" if it requires manual updates.
-    *   *Mitigation:* The system must auto-sync with active repositories and flag when its own knowledge base seems stagnant.
+## 5. Key Features & Requirements
+
+### 5.1. Role-Based Onboarding Paths
+- The Companion detects the new hire's role (Engineering, Product, or Design) at login.
+- All content, milestones, team directories, and Notion resources displayed are **specific to that role**.
+- A Designer sees Figma resources and Design team directory; an Engineer sees the tech stack and engineering crew leads.
+
+### 5.2. Structured Day-by-Day / Week-by-Week Milestones
+Role-agnostic milestones (all roles, Week 1):
+- Sign in with Everest email and reset temporary password
+- Enable 2-factor authentication
+- Join the Everest Slack channel
+- Set up Zoom with Everest email and update profile picture
+- Complete all mandatory security training
+
+Role-agnostic milestones (all roles, Week 1-2):
+- Achieve familiarity with core tools: **Miro, Figma, and AntiGravity**
+
+Role-specific milestones (Week 1-2):
+
+**Product Managers:**
+- Conduct 1-on-1s with every PM and Designer on the immediate team (working styles)
+- Conduct 1-on-1s with Crew Leads (India & Australia) and Head of Product Practice
+
+**Designers:**
+- Conduct 1-on-1s with every PM and Designer on the immediate team (working styles)
+- Conduct 1-on-1s with Crew Leads (India & Australia) and Head of Design Practice
+
+**Engineers:**
+- Conduct 1-on-1s with Crew Leads (India & Australia) and Head of Engineering
+
+### 5.3. Curated Team Directory
+- Role-filtered view of key stakeholders: mentors, crew leads, and practice heads
+- Integrated contact options: Email and Slack (deep link to Everest workspace)
+
+### 5.4. Notion Integration (Read)
+- The Companion surfaces role-relevant Notion documents at the right milestones
+- Only curated, "Holy Grail" documents are surfaced — no raw search across all of Notion
+
+---
+
+## 6. Out of Scope (MVP)
+
+| Item | Status |
+|------|--------|
+| Conversational AI / Q&A chatbot | ❌ Out of scope for MVP |
+| Learning Management System (courses, certifications) | ❌ Out of scope |
+| Performance management | ❌ Out of scope |
+| Onboarding for roles outside Engineering / Product / Design | ❌ Out of scope |
+| Jira integration | ❌ Out of scope |
+
+---
+
+## 7. Success Metrics (KPIs)
+
+| Metric | Baseline | Target |
+|--------|----------|--------|
+| Time-to-Productivity | 5 weeks | **2 weeks** |
+| Security training completion | Untracked | **100% within Week 1** |
+| Tool familiarity (Miro, Figma, AntiGravity) | Untracked | **100% by end of Week 1** |
+| 1-on-1 completion (PMs & Designers) | Untracked | **All required 1-on-1s done within 2 weeks** |
+| New Hire Confidence | Qualitative (HR check-in) | Measurable improvement at 30-day check-in |
+| Companion Adoption | N/A | **≥ 80% of new hires actively using by Day 3** |
+
+---
+
+## 8. Integrations
+
+| Tool | Integration Type | Purpose |
+|------|-----------------|---------|
+| **Notion** | Read (curated links) | Surface role-relevant documents at right milestones |
+| **Slack** | Deep link (everest-engineering.slack.com) | Direct contact with mentors and crew leads |
+| **Google OAuth** | Authentication | Sign in with Everest Google account |
+
+---
+
+## 9. Constraints & Timeline
+
+- **MVP Delivery:** 2 months from project start
+- **Budget:** Limited — no significant infrastructure spend; must use existing tools (Notion, Slack, Google)
+- **Team:** Small team; scope must stay tight to deliver in 2 months
+- **No backend AI:** Conversational AI deferred to post-MVP
+
+---
+
+## 10. Stakeholders
+
+| Name | Role | Focus |
+|------|------|-------|
+| Sam | CEO / Sponsor | ROI and growth |
+| Tim | HR | Retention and reducing new hire anxiety |
+| Melanie | CTO | Technical execution |
+
+---
+
+## 11. Risks & Mitigations
+
+- **Data Integrity ("Garbage In, Garbage Out"):**
+  - *Risk:* Many existing Notion docs are outdated. Surfacing these will mislead new hires.
+  - *Mitigation:* A mandatory "Notion Curation" phase precedes launch. Only flagged "Holy Grail" docs are ingested.
+
+- **Cultural Isolation:**
+  - *Risk:* Removing the need to ask humans questions may reduce social bonding.
+  - *Mitigation:* The Companion explicitly prompts human 1-on-1 connections as structured milestones, not optional suggestions.
+
+- **Maintenance Overhead:**
+  - *Risk:* The Companion becomes another outdated artifact.
+  - *Mitigation:* Milestone and directory content is maintained in a simple admin-editable config; no AI training required.
+
+- **Scope Creep:**
+  - *Risk:* Stakeholders add features mid-build (AI, integrations) and delay the 2-month MVP.
+  - *Mitigation:* Out of scope section (Section 6) is signed off by all stakeholders before development starts.
