@@ -10,7 +10,7 @@ export const resources = {
             title: 'Security Policy & Compliance Guide',
             description: 'Everything you need to know about security requirements, 2FA, and compliance training.',
             category: 'Compliance',
-            notionUrl: null,
+            notionUrl: 'https://www.notion.so/everestengineering/Security-Awareness-Training-Moodle-4525bd8271fc4e41be4dc2de26e5931c?source=copy_link',
         },
         {
             id: 'res-tools-guide',
