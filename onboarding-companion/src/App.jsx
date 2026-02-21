@@ -3,6 +3,7 @@ import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './firebase';
 import { useUserProfile } from './hooks/useUserProfile';
 import { useMilestoneProgress } from './hooks/useMilestoneProgress';
+import { useSkillsProfile } from './hooks/useSkillsProfile';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import ChatWidget from './components/ChatWidget';
@@ -12,6 +13,8 @@ import TeamDirectory from './components/TeamDirectory';
 import Settings from './components/Settings';
 import Login from './components/Login';
 import RoleSelector from './components/RoleSelector';
+import SkillsAssessment from './components/SkillsAssessment';
+import MySkills from './components/MySkills';
 
 function App() {
   const [firebaseUser, setFirebaseUser] = useState(null);
@@ -23,6 +26,7 @@ function App() {
 
   // Milestone progress from Firestore
   const milestoneProgress = useMilestoneProgress(firebaseUser);
+  const { skillRatings, skillsLoading, skillsCompleted, saveAssessment, updateSkillRating } = useSkillsProfile(firebaseUser);
 
   // Listen to Firebase auth state — persists login across page refreshes
   useEffect(() => {
@@ -47,8 +51,8 @@ function App() {
     tenure: 'Day 1',
   } : null;
 
-  // Loading: Firebase checking session or Firestore loading role
-  if (authLoading || (firebaseUser && profileLoading)) {
+  // Loading: Firebase checking session or Firestore loading role/skills
+  if (authLoading || (firebaseUser && (profileLoading || skillsLoading))) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -74,12 +78,18 @@ function App() {
     return <RoleSelector user={firebaseUser} onRoleSelected={saveRole} />;
   }
 
+  // Role selected but skills not assessed yet — show mandatory assessment
+  if (!skillsCompleted) {
+    return <SkillsAssessment user={firebaseUser} role={role} onComplete={saveAssessment} />;
+  }
+
   const renderView = () => {
     switch (currentView) {
       case 'dashboard': return <Dashboard user={user} setView={setView} milestoneProgress={milestoneProgress} role={role} />;
       case 'journey': return <JourneyMap role={role} milestoneProgress={milestoneProgress} />;
       case 'resources': return <Resources role={role} />;
       case 'team': return <TeamDirectory role={role} />;
+      case 'skills': return <MySkills role={role} skillRatings={skillRatings} onUpdate={updateSkillRating} />;
       case 'settings': return <Settings onLogout={handleLogout} />;
       default: return <Dashboard user={user} setView={setView} milestoneProgress={milestoneProgress} role={role} />;
     }
