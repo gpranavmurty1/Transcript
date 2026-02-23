@@ -8,11 +8,13 @@ import { db } from '../firebase';
 
 export const useUserProfile = (firebaseUser) => {
     const [role, setRole] = useState(null);
+    const [userData, setUserData] = useState(null);
     const [profileLoading, setProfileLoading] = useState(true);
 
     useEffect(() => {
         if (!firebaseUser) {
             setRole(null);
+            setUserData(null);
             setProfileLoading(false);
             return;
         }
@@ -23,13 +25,17 @@ export const useUserProfile = (firebaseUser) => {
                 const userSnap = await getDoc(userRef);
 
                 if (userSnap.exists() && userSnap.data().role) {
-                    setRole(userSnap.data().role);
+                    const data = userSnap.data();
+                    setRole(data.role);
+                    setUserData(data);
                 } else {
                     setRole(null); // triggers RoleSelector
+                    setUserData(null);
                 }
             } catch (err) {
                 console.error('Error fetching user profile:', err);
                 setRole(null);
+                setUserData(null);
             } finally {
                 setProfileLoading(false);
             }
@@ -42,17 +48,19 @@ export const useUserProfile = (firebaseUser) => {
         if (!firebaseUser) return;
         try {
             const userRef = doc(db, 'users', firebaseUser.uid);
+            const joinedAt = new Date().toISOString();
             await setDoc(userRef, {
                 role: selectedRole,
                 name: firebaseUser.displayName,
                 email: firebaseUser.email,
-                joinedAt: new Date().toISOString(),
+                joinedAt,
             }, { merge: true });
             setRole(selectedRole);
+            setUserData(prev => ({ ...prev, role: selectedRole, joinedAt }));
         } catch (err) {
             console.error('Error saving role:', err);
         }
     };
 
-    return { role, profileLoading, saveRole };
+    return { role, userData, profileLoading, saveRole };
 };

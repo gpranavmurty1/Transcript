@@ -23,7 +23,7 @@ function App() {
   const [currentView, setView] = useState('dashboard');
 
   // Firebase user profile (role) from Firestore
-  const { role, profileLoading, saveRole } = useUserProfile(firebaseUser);
+  const { role, userData, profileLoading, saveRole } = useUserProfile(firebaseUser);
 
   // Milestone progress from Firestore
   const milestoneProgress = useMilestoneProgress(firebaseUser);
@@ -49,7 +49,7 @@ function App() {
     email: firebaseUser.email,
     photoURL: firebaseUser.photoURL,
     role: role || 'Team Member',
-    tenure: 'Day 1',
+    joinedAt: userData?.joinedAt || null,
   } : null;
 
   // Loading: Firebase checking session or Firestore loading role/skills
