@@ -33,44 +33,76 @@ const Sidebar = ({ currentView, setView, user, onLogout }) => {
     };
 
     return (
-        <div className="w-64 bg-slate-900 border-r border-slate-800 h-screen sticky top-0 flex flex-col pt-8 pb-6 px-4 shrink-0 transition-all duration-300 ease-in-out">
+        <div
+            className="w-64 h-screen sticky top-0 flex flex-col pt-8 pb-6 px-4 shrink-0 transition-all duration-300 ease-in-out"
+            style={{ background: '#262424', borderRight: '1px solid rgba(236,165,8,0.15)' }}
+        >
             {/* Brand */}
             <div className="mb-10 px-4 flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-900/50">OC</div>
-                <div className="font-bold text-lg tracking-tight text-white leading-tight">Onboarding<br />Companion</div>
+                <div
+                    className="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-base shadow-lg"
+                    style={{ background: '#ECA508', color: '#262424' }}
+                >
+                    E
+                </div>
+                <div className="font-bold text-base tracking-tight leading-tight" style={{ color: '#F9EFDF' }}>
+                    Onboarding<br />Companion
+                </div>
             </div>
 
             {/* Navigation */}
             <nav className="space-y-1.5 flex-1">
-                <div className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-4">Menu</div>
-                {menuItems.map((item) => (
-                    <button
-                        key={item.id}
-                        onClick={() => setView(item.id)}
-                        className={`w-full text-left px-4 py-2.5 rounded-lg flex items-center gap-3 transition-all duration-200 font-medium ${currentView === item.id
-                            ? 'bg-blue-600 text-white shadow-md shadow-blue-900/30'
-                            : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/50'
-                            }`}
-                    >
-                        <item.icon size={18} />
-                        <span>{item.label}</span>
-                    </button>
-                ))}
+                <div className="text-xs font-semibold uppercase tracking-wider mb-4 px-4" style={{ color: 'rgba(249,239,223,0.35)' }}>Menu</div>
+                {menuItems.map((item) => {
+                    const isActive = currentView === item.id;
+                    return (
+                        <button
+                            key={item.id}
+                            onClick={() => setView(item.id)}
+                            className="w-full text-left px-4 py-2.5 rounded-lg flex items-center gap-3 transition-all duration-200 font-medium"
+                            style={isActive
+                                ? { background: '#ECA508', color: '#262424' }
+                                : { color: 'rgba(249,239,223,0.55)' }
+                            }
+                            onMouseEnter={e => {
+                                if (!isActive) {
+                                    e.currentTarget.style.background = 'rgba(236,165,8,0.12)';
+                                    e.currentTarget.style.color = '#F9EFDF';
+                                }
+                            }}
+                            onMouseLeave={e => {
+                                if (!isActive) {
+                                    e.currentTarget.style.background = 'transparent';
+                                    e.currentTarget.style.color = 'rgba(249,239,223,0.55)';
+                                }
+                            }}
+                        >
+                            <item.icon size={18} />
+                            <span>{item.label}</span>
+                        </button>
+                    );
+                })}
             </nav>
 
             {/* User Profile */}
-            <div className="mt-auto pt-6 border-t border-slate-800/50 px-2 relative" ref={profileRef}>
+            <div className="mt-auto pt-6 px-2 relative" style={{ borderTop: '1px solid rgba(236,165,8,0.12)' }} ref={profileRef}>
 
                 {/* Logout Popup Menu */}
                 {showProfileMenu && (
-                    <div className="absolute bottom-full left-0 right-0 mb-2 mx-1 bg-slate-800 border border-slate-700 rounded-xl shadow-2xl shadow-black/50 overflow-hidden z-50 animate-fade-in">
-                        <div className="px-4 py-3 border-b border-slate-700">
-                            <div className="text-sm font-semibold text-white truncate">{user?.name || 'User'}</div>
-                            <div className="text-xs text-slate-400 truncate">{user?.email || ''}</div>
+                    <div
+                        className="absolute bottom-full left-0 right-0 mb-2 mx-1 rounded-xl shadow-2xl overflow-hidden z-50"
+                        style={{ background: '#3a3636', border: '1px solid rgba(236,165,8,0.15)' }}
+                    >
+                        <div className="px-4 py-3" style={{ borderBottom: '1px solid rgba(236,165,8,0.12)' }}>
+                            <div className="text-sm font-semibold truncate" style={{ color: '#F9EFDF' }}>{user?.name || 'User'}</div>
+                            <div className="text-xs truncate" style={{ color: 'rgba(249,239,223,0.45)' }}>{user?.email || ''}</div>
                         </div>
                         <button
                             onClick={handleLogout}
-                            className="w-full flex items-center gap-3 px-4 py-3 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition-all duration-150"
+                            className="w-full flex items-center gap-3 px-4 py-3 text-sm transition-all duration-150"
+                            style={{ color: '#F97070' }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(249,112,112,0.08)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         >
                             <LogOut size={16} />
                             <span>Logout</span>
@@ -81,16 +113,21 @@ const Sidebar = ({ currentView, setView, user, onLogout }) => {
                 {/* Profile Button */}
                 <button
                     onClick={() => setShowProfileMenu((prev) => !prev)}
-                    className="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-800 transition-colors w-full"
+                    className="flex items-center gap-3 p-2 rounded-xl transition-colors w-full"
+                    onMouseEnter={e => e.currentTarget.style.background = 'rgba(236,165,8,0.08)'}
+                    onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                 >
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-emerald-400 to-cyan-500 flex items-center justify-center text-slate-900 font-bold text-sm shadow-lg shrink-0">
+                    <div
+                        className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm shadow-lg shrink-0"
+                        style={{ background: '#ECA508', color: '#262424' }}
+                    >
                         {getInitial(user?.name)}
                     </div>
                     <div className="text-left flex-1 min-w-0">
-                        <div className="text-sm font-semibold text-white truncate">{user?.name || 'User'}</div>
-                        <div className="text-xs text-slate-500 truncate">{user?.role || 'Team Member'}</div>
+                        <div className="text-sm font-semibold truncate" style={{ color: '#F9EFDF' }}>{user?.name || 'User'}</div>
+                        <div className="text-xs truncate" style={{ color: 'rgba(249,239,223,0.45)' }}>{user?.role || 'Team Member'}</div>
                     </div>
-                    <div className={`text-slate-500 text-xs transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`}>▲</div>
+                    <div className={`text-xs transition-transform duration-200 ${showProfileMenu ? 'rotate-180' : ''}`} style={{ color: 'rgba(249,239,223,0.35)' }}>▲</div>
                 </button>
             </div>
         </div>

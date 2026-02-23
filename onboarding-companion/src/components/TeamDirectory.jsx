@@ -30,13 +30,19 @@ const ContactCard = ({ person, compact = false }) => {
 
     if (isTBD) {
         return (
-            <div className="bg-slate-900/20 border border-slate-800/40 border-dashed rounded-2xl p-5 flex items-center gap-3 opacity-50">
-                <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-600 text-xs font-bold shrink-0">
+            <div
+                className="rounded-2xl p-5 flex items-center gap-3 opacity-50"
+                style={{ background: 'rgba(38,36,36,0.04)', border: '1.5px dashed rgba(38,36,36,0.15)' }}
+            >
+                <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                    style={{ background: 'rgba(38,36,36,0.08)', color: '#9e8e8e' }}
+                >
                     TBD
                 </div>
                 <div>
-                    <div className="text-slate-500 text-sm font-medium">{person.role}</div>
-                    <div className="flex items-center gap-1 text-xs text-slate-600 mt-0.5">
+                    <div className="text-sm font-medium" style={{ color: '#9e8e8e' }}>{person.role}</div>
+                    <div className="flex items-center gap-1 text-xs mt-0.5" style={{ color: '#9e8e8e' }}>
                         <Globe size={10} />
                         {regionFlag(person.region)} {person.region}
                     </div>
@@ -46,19 +52,25 @@ const ContactCard = ({ person, compact = false }) => {
     }
 
     return (
-        <div className={`bg-slate-900/40 border border-slate-800 rounded-2xl transition-all duration-200 hover:border-slate-600 hover:shadow-lg hover:shadow-black/20 group ${compact ? 'p-4' : 'p-5'}`}>
+        <div
+            className={`group rounded-2xl transition-all duration-200 ${compact ? 'p-4' : 'p-5'}`}
+            style={{ background: 'rgba(255,255,255,0.65)', border: '1px solid rgba(38,36,36,0.08)' }}
+            onMouseEnter={e => e.currentTarget.style.border = '1px solid rgba(236,165,8,0.3)'}
+            onMouseLeave={e => e.currentTarget.style.border = '1px solid rgba(38,36,36,0.08)'}
+        >
             <div className="flex items-start gap-3 mb-3">
                 <img
                     src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${person.avatar}&sex[]=${person.gender}`}
                     alt={person.name}
-                    className={`rounded-full bg-slate-800 shrink-0 ${compact ? 'w-10 h-10' : 'w-12 h-12'}`}
+                    className={`rounded-full shrink-0 ${compact ? 'w-10 h-10' : 'w-12 h-12'}`}
+                    style={{ background: 'rgba(38,36,36,0.06)' }}
                 />
                 <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-white text-sm leading-tight group-hover:text-blue-400 transition-colors truncate">
+                    <div className="font-semibold text-sm leading-tight truncate transition-colors" style={{ color: '#262424' }}>
                         {person.name}
                     </div>
-                    <div className="text-xs text-blue-400 font-medium mt-0.5 truncate">{person.role}</div>
-                    <div className="flex items-center gap-1 text-xs text-slate-500 mt-0.5">
+                    <div className="text-xs font-medium mt-0.5 truncate" style={{ color: '#ECA508' }}>{person.role}</div>
+                    <div className="flex items-center gap-1 text-xs mt-0.5" style={{ color: '#9e8e8e' }}>
                         <Globe size={10} />
                         {regionFlag(person.region)} {person.region}
                     </div>
@@ -66,7 +78,10 @@ const ContactCard = ({ person, compact = false }) => {
             </div>
 
             {!compact && person.bio && (
-                <p className="text-xs text-slate-500 leading-relaxed mb-3 border-t border-slate-800 pt-3">
+                <p
+                    className="text-xs leading-relaxed mb-3 pt-3"
+                    style={{ color: '#9e8e8e', borderTop: '1px solid rgba(38,36,36,0.07)' }}
+                >
                     {person.bio}
                 </p>
             )}
@@ -76,7 +91,10 @@ const ContactCard = ({ person, compact = false }) => {
                     {person.email && (
                         <a
                             href={`mailto:${person.email}`}
-                            className="flex-1 py-1.5 rounded-lg bg-slate-800 hover:bg-blue-600 text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center justify-center gap-1.5"
+                            className="flex-1 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+                            style={{ background: 'rgba(38,36,36,0.06)', color: '#262424' }}
+                            onMouseEnter={e => { e.currentTarget.style.background = '#262424'; e.currentTarget.style.color = '#F9EFDF'; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(38,36,36,0.06)'; e.currentTarget.style.color = '#262424'; }}
                         >
                             <Mail size={12} /> Email
                         </a>
@@ -86,7 +104,10 @@ const ContactCard = ({ person, compact = false }) => {
                             href={`${SLACK_WORKSPACE}/${person.slackUsername}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex-1 py-1.5 rounded-lg bg-slate-800 hover:bg-[#4A154B] text-xs font-semibold text-slate-300 hover:text-white transition-all flex items-center justify-center gap-1.5"
+                            className="flex-1 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
+                            style={{ background: 'rgba(38,36,36,0.06)', color: '#262424' }}
+                            onMouseEnter={e => { e.currentTarget.style.background = '#4A154B'; e.currentTarget.style.color = '#fff'; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(38,36,36,0.06)'; e.currentTarget.style.color = '#262424'; }}
                         >
                             <SlackIcon /> Slack
                         </a>
@@ -100,8 +121,11 @@ const ContactCard = ({ person, compact = false }) => {
 const SectionHeader = ({ title, count, icon }) => (
     <div className="flex items-center gap-3 mb-5">
         <span className="text-xl">{icon}</span>
-        <h2 className="text-xl font-bold text-white">{title}</h2>
-        <span className="px-2.5 py-0.5 rounded-full bg-blue-600/20 text-blue-400 text-xs font-semibold border border-blue-500/20">
+        <h2 className="text-xl font-bold" style={{ color: '#262424' }}>{title}</h2>
+        <span
+            className="px-2.5 py-0.5 rounded-full text-xs font-semibold border"
+            style={{ color: '#ECA508', background: 'rgba(236,165,8,0.08)', borderColor: 'rgba(236,165,8,0.25)' }}
+        >
             {count}
         </span>
     </div>
@@ -113,20 +137,29 @@ const CrewSection = ({ crew }) => {
     const tbdLeads = crew.leads.filter((l) => l.name === 'TBD');
 
     return (
-        <div className="bg-slate-900/20 border border-slate-800 rounded-2xl p-6 mb-4">
+        <div
+            className="rounded-2xl p-6 mb-4"
+            style={{ background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(38,36,36,0.08)' }}
+        >
             <button
                 onClick={() => setOpen((p) => !p)}
                 className="w-full flex items-center justify-between mb-1"
             >
                 <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-bold text-white">{crew.name}</h3>
-                    <span className="text-xs font-semibold text-slate-500 border border-slate-700 rounded-full px-2 py-0.5">
+                    <h3 className="text-lg font-bold" style={{ color: '#262424' }}>{crew.name}</h3>
+                    <span
+                        className="text-xs font-semibold rounded-full px-2 py-0.5"
+                        style={{ color: '#9e8e8e', border: '1px solid rgba(38,36,36,0.1)' }}
+                    >
                         {crew.leads.length} leads
                     </span>
                 </div>
-                {open ? <ChevronUp size={16} className="text-slate-500" /> : <ChevronDown size={16} className="text-slate-500" />}
+                {open
+                    ? <ChevronUp size={16} style={{ color: '#9e8e8e' }} />
+                    : <ChevronDown size={16} style={{ color: '#9e8e8e' }} />
+                }
             </button>
-            <p className="text-sm text-slate-500 mb-4 text-left">{crew.description}</p>
+            <p className="text-sm mb-4 text-left" style={{ color: '#9e8e8e' }}>{crew.description}</p>
 
             {open && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -148,8 +181,8 @@ const TeamDirectory = ({ role }) => {
 
     return (
         <div className="p-10 max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold text-white mb-2">Team Directory</h1>
-            <p className="text-slate-400 mb-10">Your key contacts for onboarding — mentors, crew leads, and practice heads.</p>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: '#262424' }}>Team Directory</h1>
+            <p className="mb-10" style={{ color: '#9e8e8e' }}>Your key contacts for onboarding — mentors, crew leads, and practice heads.</p>
 
             {/* Practice Head */}
             {practiceHead && (
@@ -176,7 +209,7 @@ const TeamDirectory = ({ role }) => {
             {/* Crew Leads — all three crews */}
             <div className="mb-12">
                 <SectionHeader title="Crew Leads" count={crews.reduce((a, c) => a + c.leads.length, 0)} icon="👥" />
-                <p className="text-slate-500 text-sm mb-6 -mt-2">
+                <p className="text-sm mb-6 -mt-2" style={{ color: '#9e8e8e' }}>
                     Each crew has two leads — one in India 🇮🇳 and one in Australia 🇦🇺.
                 </p>
                 {crews.map((crew) => (

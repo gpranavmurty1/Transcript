@@ -3,23 +3,27 @@ import { CheckCircle2, Circle, ChevronDown, ChevronUp, ExternalLink } from 'luci
 import { getMilestonesForRole } from '../config/milestones';
 
 const categoryColors = {
-    Setup: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-    Communication: 'bg-violet-500/10 text-violet-400 border-violet-500/20',
-    Compliance: 'bg-red-500/10 text-red-400 border-red-500/20',
-    Tools: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-    Relationships: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+    Setup: { color: '#ECA508', bg: 'rgba(236,165,8,0.08)', border: 'rgba(236,165,8,0.25)' },
+    Communication: { color: '#262424', bg: 'rgba(38,36,36,0.06)', border: 'rgba(38,36,36,0.18)' },
+    Compliance: { color: '#F97070', bg: 'rgba(249,112,112,0.08)', border: 'rgba(249,112,112,0.25)' },
+    Tools: { color: '#d4920a', bg: 'rgba(212,146,10,0.08)', border: 'rgba(212,146,10,0.25)' },
+    Relationships: { color: '#6b5e5e', bg: 'rgba(107,94,94,0.08)', border: 'rgba(107,94,94,0.2)' },
 };
 
 const MilestoneCard = ({ milestone, completed, onToggle }) => {
     const [expanded, setExpanded] = useState(false);
-    const colorClass = categoryColors[milestone.category] || 'bg-slate-500/10 text-slate-400 border-slate-500/20';
+    const cat = categoryColors[milestone.category] || { color: '#9e8e8e', bg: 'rgba(38,36,36,0.05)', border: 'rgba(38,36,36,0.12)' };
 
     return (
         <div
-            className={`border rounded-2xl transition-all duration-200 ${completed
-                    ? 'bg-slate-900/20 border-slate-800/50 opacity-60'
-                    : 'bg-slate-900/40 border-slate-800 hover:border-slate-600 hover:shadow-lg hover:shadow-black/20'
-                }`}
+            className="rounded-2xl transition-all duration-200"
+            style={{
+                background: completed ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.65)',
+                border: `1px solid ${completed ? 'rgba(38,36,36,0.06)' : 'rgba(38,36,36,0.09)'}`,
+                opacity: completed ? 0.65 : 1,
+            }}
+            onMouseEnter={e => { if (!completed) e.currentTarget.style.border = '1px solid rgba(236,165,8,0.3)'; }}
+            onMouseLeave={e => { e.currentTarget.style.border = `1px solid ${completed ? 'rgba(38,36,36,0.06)' : 'rgba(38,36,36,0.09)'}`; }}
         >
             <div className="p-5 flex items-start gap-4">
                 {/* Checkbox */}
@@ -29,39 +33,54 @@ const MilestoneCard = ({ milestone, completed, onToggle }) => {
                     aria-label={completed ? 'Mark incomplete' : 'Mark complete'}
                 >
                     {completed
-                        ? <CheckCircle2 size={22} className="text-emerald-500" />
-                        : <Circle size={22} className="text-slate-600 hover:text-blue-400 transition-colors" />
+                        ? <CheckCircle2 size={22} style={{ color: '#ECA508' }} />
+                        : <Circle size={22} style={{ color: 'rgba(38,36,36,0.2)' }} />
                     }
                 </button>
 
                 {/* Content */}
                 <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between gap-3 mb-1">
-                        <h3 className={`font-semibold text-base leading-snug ${completed ? 'text-slate-500 line-through' : 'text-white'}`}>
+                        <h3
+                            className="font-semibold text-base leading-snug"
+                            style={{ color: completed ? '#9e8e8e' : '#262424', textDecoration: completed ? 'line-through' : 'none' }}
+                        >
                             {milestone.title}
                         </h3>
-                        <span className={`shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full border ${colorClass}`}>
+                        <span
+                            className="shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full border"
+                            style={{ color: cat.color, background: cat.bg, borderColor: cat.border }}
+                        >
                             {milestone.category}
                         </span>
                     </div>
 
                     <button
                         onClick={() => setExpanded((p) => !p)}
-                        className="flex items-center gap-1 text-xs text-slate-500 hover:text-slate-300 transition-colors mt-1"
+                        className="flex items-center gap-1 text-xs mt-1 transition-colors"
+                        style={{ color: '#9e8e8e' }}
+                        onMouseEnter={e => e.currentTarget.style.color = '#ECA508'}
+                        onMouseLeave={e => e.currentTarget.style.color = '#9e8e8e'}
                     >
                         {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
                         {expanded ? 'Less' : 'More info'}
                     </button>
 
                     {expanded && (
-                        <div className="mt-3 pt-3 border-t border-slate-800 text-sm text-slate-400 leading-relaxed space-y-2">
+                        <div
+                            className="mt-3 pt-3 text-sm leading-relaxed space-y-2"
+                            style={{ borderTop: '1px solid rgba(38,36,36,0.07)', color: '#6b5e5e' }}
+                        >
                             <p>{milestone.description}</p>
                             {milestone.notionLink && (
                                 <a
                                     href={milestone.notionLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1.5 text-blue-400 hover:text-blue-300 text-xs font-medium"
+                                    className="inline-flex items-center gap-1.5 text-xs font-medium transition-colors"
+                                    style={{ color: '#ECA508' }}
+                                    onMouseEnter={e => e.currentTarget.style.color = '#d4920a'}
+                                    onMouseLeave={e => e.currentTarget.style.color = '#ECA508'}
                                 >
                                     <ExternalLink size={12} />
                                     Open in Notion
@@ -79,19 +98,22 @@ const WeekSection = ({ week, milestones, completedMap, onToggle, progress }) => 
     <div className="mb-10">
         <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-                <h2 className="text-xl font-bold text-white">Week {week}</h2>
-                <span className={`text-xs font-semibold px-2.5 py-0.5 rounded-full border ${progress.percent === 100
-                        ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20'
-                        : 'bg-blue-600/20 text-blue-400 border-blue-500/20'
-                    }`}>
+                <h2 className="text-xl font-bold" style={{ color: '#262424' }}>Week {week}</h2>
+                <span
+                    className="text-xs font-semibold px-2.5 py-0.5 rounded-full border"
+                    style={progress.percent === 100
+                        ? { color: '#ECA508', background: 'rgba(236,165,8,0.08)', borderColor: 'rgba(236,165,8,0.25)' }
+                        : { color: '#6b5e5e', background: 'rgba(38,36,36,0.05)', borderColor: 'rgba(38,36,36,0.12)' }
+                    }
+                >
                     {progress.done}/{progress.total} done
                 </span>
             </div>
             {/* Mini progress bar */}
-            <div className="w-32 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div className="w-32 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(38,36,36,0.08)' }}>
                 <div
-                    className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all duration-500"
-                    style={{ width: `${progress.percent}%` }}
+                    className="h-full rounded-full transition-all duration-500"
+                    style={{ width: `${progress.percent}%`, background: 'linear-gradient(to right, #ECA508, #F97070)' }}
                 />
             </div>
         </div>
@@ -125,38 +147,41 @@ const JourneyMap = ({ role, milestoneProgress }) => {
         <div className="p-10 max-w-4xl mx-auto">
             {/* Header */}
             <div className="mb-10">
-                <h1 className="text-3xl font-bold text-white mb-2">My Journey</h1>
-                <p className="text-slate-400 mb-6">Your personalised {roleLabel} onboarding path — 2 weeks to full productivity.</p>
+                <h1 className="text-3xl font-bold mb-2" style={{ color: '#262424' }}>My Journey</h1>
+                <p className="mb-6" style={{ color: '#9e8e8e' }}>Your personalised {roleLabel} onboarding path — 2 weeks to full productivity.</p>
 
                 {/* Overall progress */}
-                <div className="bg-slate-900/40 border border-slate-800 rounded-2xl p-5 flex items-center gap-6">
+                <div
+                    className="rounded-2xl p-5 flex items-center gap-6"
+                    style={{ background: 'rgba(255,255,255,0.65)', border: '1px solid rgba(38,36,36,0.07)' }}
+                >
                     <div className="relative w-16 h-16 shrink-0">
                         <svg className="w-16 h-16 -rotate-90" viewBox="0 0 36 36">
-                            <circle cx="18" cy="18" r="15.9" fill="none" stroke="#1e293b" strokeWidth="3" />
+                            <circle cx="18" cy="18" r="15.9" fill="none" stroke="rgba(38,36,36,0.08)" strokeWidth="3" />
                             <circle
                                 cx="18" cy="18" r="15.9" fill="none"
-                                stroke="url(#progressGrad)" strokeWidth="3"
+                                stroke="url(#evProgressGrad)" strokeWidth="3"
                                 strokeDasharray={`${overallProgress.percent} ${100 - overallProgress.percent}`}
                                 strokeLinecap="round"
                             />
                             <defs>
-                                <linearGradient id="progressGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                                    <stop offset="0%" stopColor="#3b82f6" />
-                                    <stop offset="100%" stopColor="#10b981" />
+                                <linearGradient id="evProgressGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                    <stop offset="0%" stopColor="#ECA508" />
+                                    <stop offset="100%" stopColor="#F97070" />
                                 </linearGradient>
                             </defs>
                         </svg>
-                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold text-white">
+                        <span className="absolute inset-0 flex items-center justify-center text-sm font-bold" style={{ color: '#262424' }}>
                             {overallProgress.percent}%
                         </span>
                     </div>
                     <div>
-                        <div className="text-white font-semibold mb-0.5">Overall Progress</div>
-                        <div className="text-slate-400 text-sm">
+                        <div className="font-semibold mb-0.5" style={{ color: '#262424' }}>Overall Progress</div>
+                        <div className="text-sm" style={{ color: '#9e8e8e' }}>
                             {overallProgress.done} of {overallProgress.total} milestones complete
                         </div>
                         {overallProgress.percent === 100 && (
-                            <div className="text-emerald-400 text-xs font-semibold mt-1">🎉 Onboarding complete!</div>
+                            <div className="text-xs font-semibold mt-1" style={{ color: '#ECA508' }}>🎉 Onboarding complete!</div>
                         )}
                     </div>
                 </div>
