@@ -52,8 +52,22 @@ The goal: shift new hires from *"I have the links, but I'm lost"* to *"I know ex
 
 ### 5.1. Role-Based Onboarding Paths
 - The Companion detects the new hire's role (Engineering, Product, or Design) at login.
+- **Role Display Names:**
+  - **Product** → Product Manager
+  - **Design** → Product Designer
+  - **Engineering** → Software Craftsperson
 - All content, milestones, team directories, and Notion resources displayed are **specific to that role**.
 - A Designer sees Figma resources and Design team directory; an Engineer sees the tech stack and engineering crew leads.
+
+...
+
+### 5.6. Onboarding Dashboard Highlights (NEW)
+The landing page (Dashboard) must highlight key onboarding metadata to orient the user:
+- **Date of Joining Everest:** Displayed prominently.
+- **Role:** The specific display name based on user selection.
+- **Current Date:** The current system date.
+- **Onboarding Progress Calculation:** The "First Two Weeks" progress must be calculated and visualized based on the difference between the **Joining Date** and the **Current Date**.
+
 
 ### 5.2. Structured Day-by-Day / Week-by-Week Milestones
 Role-agnostic milestones (all roles, Week 1):
