@@ -4,14 +4,15 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
         everest: {
-          black:  '#262424',
+          black: '#262424',
           yellow: '#ECA508',
-          peach:  '#F97070',
-          beige:  '#F9EFDF',
+          peach: '#F97070',
+          beige: '#F9EFDF',
         },
       },
       fontFamily: {

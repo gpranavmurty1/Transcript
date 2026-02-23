@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from './firebase';
+import { ThemeProvider } from './context/ThemeContext';
 import { useUserProfile } from './hooks/useUserProfile';
 import { useMilestoneProgress } from './hooks/useMilestoneProgress';
 import { useSkillsProfile } from './hooks/useSkillsProfile';
@@ -96,9 +97,9 @@ function App() {
   };
 
   return (
-    <div className="flex min-h-screen" style={{ color: '#262424' }}>
+    <div className="flex min-h-screen" style={{ color: 'var(--text-primary)' }}>
       <Sidebar currentView={currentView} setView={setView} user={user} onLogout={handleLogout} />
-      <main className="flex-1 overflow-y-auto h-screen" style={{ background: '#F9EFDF' }}>
+      <main className="flex-1 overflow-y-auto h-screen" style={{ background: 'var(--bg-primary)' }}>
         {renderView()}
       </main>
       <ChatWidget />
@@ -106,4 +107,10 @@ function App() {
   );
 }
 
-export default App;
+const AppWithTheme = () => (
+  <ThemeProvider>
+    <App />
+  </ThemeProvider>
+);
+
+export default AppWithTheme;

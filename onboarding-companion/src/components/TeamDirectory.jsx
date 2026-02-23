@@ -30,21 +30,14 @@ const ContactCard = ({ person, compact = false }) => {
 
     if (isTBD) {
         return (
-            <div
-                className="rounded-2xl p-5 flex items-center gap-3 opacity-50"
-                style={{ background: 'rgba(38,36,36,0.04)', border: '1.5px dashed rgba(38,36,36,0.15)' }}
-            >
-                <div
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
-                    style={{ background: 'rgba(38,36,36,0.08)', color: '#9e8e8e' }}
-                >
-                    TBD
-                </div>
+            <div className="rounded-2xl p-5 flex items-center gap-3 opacity-40"
+                style={{ background: 'var(--bg-card)', border: '1.5px dashed var(--border)' }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                    style={{ background: 'var(--border)', color: 'var(--text-muted)' }}>TBD</div>
                 <div>
-                    <div className="text-sm font-medium" style={{ color: '#9e8e8e' }}>{person.role}</div>
-                    <div className="flex items-center gap-1 text-xs mt-0.5" style={{ color: '#9e8e8e' }}>
-                        <Globe size={10} />
-                        {regionFlag(person.region)} {person.region}
+                    <div className="text-sm font-medium" style={{ color: 'var(--text-muted)' }}>{person.role}</div>
+                    <div className="flex items-center gap-1 text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                        <Globe size={10} /> {regionFlag(person.region)} {person.region}
                     </div>
                 </div>
             </div>
@@ -54,34 +47,28 @@ const ContactCard = ({ person, compact = false }) => {
     return (
         <div
             className={`group rounded-2xl transition-all duration-200 ${compact ? 'p-4' : 'p-5'}`}
-            style={{ background: 'rgba(255,255,255,0.65)', border: '1px solid rgba(38,36,36,0.08)' }}
-            onMouseEnter={e => e.currentTarget.style.border = '1px solid rgba(236,165,8,0.3)'}
-            onMouseLeave={e => e.currentTarget.style.border = '1px solid rgba(38,36,36,0.08)'}
+            style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}
+            onMouseEnter={e => e.currentTarget.style.border = '1px solid var(--border-accent)'}
+            onMouseLeave={e => e.currentTarget.style.border = '1px solid var(--border)'}
         >
             <div className="flex items-start gap-3 mb-3">
                 <img
                     src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${person.avatar}&sex[]=${person.gender}`}
                     alt={person.name}
                     className={`rounded-full shrink-0 ${compact ? 'w-10 h-10' : 'w-12 h-12'}`}
-                    style={{ background: 'rgba(38,36,36,0.06)' }}
+                    style={{ background: 'var(--border)' }}
                 />
                 <div className="flex-1 min-w-0">
-                    <div className="font-semibold text-sm leading-tight truncate transition-colors" style={{ color: '#262424' }}>
-                        {person.name}
-                    </div>
-                    <div className="text-xs font-medium mt-0.5 truncate" style={{ color: '#ECA508' }}>{person.role}</div>
-                    <div className="flex items-center gap-1 text-xs mt-0.5" style={{ color: '#9e8e8e' }}>
-                        <Globe size={10} />
-                        {regionFlag(person.region)} {person.region}
+                    <div className="font-semibold text-sm leading-tight truncate" style={{ color: 'var(--text-primary)' }}>{person.name}</div>
+                    <div className="text-xs font-medium mt-0.5 truncate" style={{ color: 'var(--accent)' }}>{person.role}</div>
+                    <div className="flex items-center gap-1 text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
+                        <Globe size={10} /> {regionFlag(person.region)} {person.region}
                     </div>
                 </div>
             </div>
 
             {!compact && person.bio && (
-                <p
-                    className="text-xs leading-relaxed mb-3 pt-3"
-                    style={{ color: '#9e8e8e', borderTop: '1px solid rgba(38,36,36,0.07)' }}
-                >
+                <p className="text-xs leading-relaxed mb-3 pt-3" style={{ color: 'var(--text-muted)', borderTop: '1px solid var(--border)' }}>
                     {person.bio}
                 </p>
             )}
@@ -89,28 +76,20 @@ const ContactCard = ({ person, compact = false }) => {
             {hasContact && (
                 <div className="flex gap-2">
                     {person.email && (
-                        <a
-                            href={`mailto:${person.email}`}
+                        <a href={`mailto:${person.email}`}
                             className="flex-1 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
-                            style={{ background: 'rgba(38,36,36,0.06)', color: '#262424' }}
-                            onMouseEnter={e => { e.currentTarget.style.background = '#262424'; e.currentTarget.style.color = '#F9EFDF'; }}
-                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(38,36,36,0.06)'; e.currentTarget.style.color = '#262424'; }}
-                        >
-                            <Mail size={12} /> Email
-                        </a>
+                            style={{ background: 'var(--border)', color: 'var(--text-primary)' }}
+                            onMouseEnter={e => { e.currentTarget.style.background = 'var(--bg-sidebar)'; e.currentTarget.style.color = 'var(--text-sidebar)'; }}
+                            onMouseLeave={e => { e.currentTarget.style.background = 'var(--border)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+                        ><Mail size={12} /> Email</a>
                     )}
                     {person.slackUsername && (
-                        <a
-                            href={`${SLACK_WORKSPACE}/${person.slackUsername}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                        <a href={`${SLACK_WORKSPACE}/${person.slackUsername}`} target="_blank" rel="noopener noreferrer"
                             className="flex-1 py-1.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all"
-                            style={{ background: 'rgba(38,36,36,0.06)', color: '#262424' }}
+                            style={{ background: 'var(--border)', color: 'var(--text-primary)' }}
                             onMouseEnter={e => { e.currentTarget.style.background = '#4A154B'; e.currentTarget.style.color = '#fff'; }}
-                            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(38,36,36,0.06)'; e.currentTarget.style.color = '#262424'; }}
-                        >
-                            <SlackIcon /> Slack
-                        </a>
+                            onMouseLeave={e => { e.currentTarget.style.background = 'var(--border)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+                        ><SlackIcon /> Slack</a>
                     )}
                 </div>
             )}
@@ -121,54 +100,31 @@ const ContactCard = ({ person, compact = false }) => {
 const SectionHeader = ({ title, count, icon }) => (
     <div className="flex items-center gap-3 mb-5">
         <span className="text-xl">{icon}</span>
-        <h2 className="text-xl font-bold" style={{ color: '#262424' }}>{title}</h2>
-        <span
-            className="px-2.5 py-0.5 rounded-full text-xs font-semibold border"
-            style={{ color: '#ECA508', background: 'rgba(236,165,8,0.08)', borderColor: 'rgba(236,165,8,0.25)' }}
-        >
-            {count}
-        </span>
+        <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{title}</h2>
+        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold border"
+            style={{ color: 'var(--accent)', background: 'rgba(236,165,8,0.08)', borderColor: 'var(--border-accent)' }}>{count}</span>
     </div>
 );
 
 const CrewSection = ({ crew }) => {
     const [open, setOpen] = useState(true);
-    const activeleads = crew.leads.filter((l) => l.name !== 'TBD');
-    const tbdLeads = crew.leads.filter((l) => l.name === 'TBD');
-
+    const activeLeads = crew.leads.filter(l => l.name !== 'TBD');
+    const tbdLeads = crew.leads.filter(l => l.name === 'TBD');
     return (
-        <div
-            className="rounded-2xl p-6 mb-4"
-            style={{ background: 'rgba(255,255,255,0.55)', border: '1px solid rgba(38,36,36,0.08)' }}
-        >
-            <button
-                onClick={() => setOpen((p) => !p)}
-                className="w-full flex items-center justify-between mb-1"
-            >
+        <div className="rounded-2xl p-6 mb-4" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)' }}>
+            <button onClick={() => setOpen(p => !p)} className="w-full flex items-center justify-between mb-1">
                 <div className="flex items-center gap-3">
-                    <h3 className="text-lg font-bold" style={{ color: '#262424' }}>{crew.name}</h3>
-                    <span
-                        className="text-xs font-semibold rounded-full px-2 py-0.5"
-                        style={{ color: '#9e8e8e', border: '1px solid rgba(38,36,36,0.1)' }}
-                    >
-                        {crew.leads.length} leads
-                    </span>
+                    <h3 className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>{crew.name}</h3>
+                    <span className="text-xs font-semibold rounded-full px-2 py-0.5"
+                        style={{ color: 'var(--text-muted)', border: '1px solid var(--border)' }}>{crew.leads.length} leads</span>
                 </div>
-                {open
-                    ? <ChevronUp size={16} style={{ color: '#9e8e8e' }} />
-                    : <ChevronDown size={16} style={{ color: '#9e8e8e' }} />
-                }
+                {open ? <ChevronUp size={16} style={{ color: 'var(--text-muted)' }} /> : <ChevronDown size={16} style={{ color: 'var(--text-muted)' }} />}
             </button>
-            <p className="text-sm mb-4 text-left" style={{ color: '#9e8e8e' }}>{crew.description}</p>
-
+            <p className="text-sm mb-4 text-left" style={{ color: 'var(--text-muted)' }}>{crew.description}</p>
             {open && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    {activeleads.map((lead) => (
-                        <ContactCard key={lead.email || lead.name} person={lead} compact />
-                    ))}
-                    {tbdLeads.map((lead, i) => (
-                        <ContactCard key={`tbd-${i}`} person={lead} compact />
-                    ))}
+                    {activeLeads.map(lead => <ContactCard key={lead.email || lead.name} person={lead} compact />)}
+                    {tbdLeads.map((lead, i) => <ContactCard key={`tbd-${i}`} person={lead} compact />)}
                 </div>
             )}
         </div>
@@ -178,43 +134,33 @@ const CrewSection = ({ crew }) => {
 const TeamDirectory = ({ role }) => {
     const practiceHead = practiceHeads[role];
     const roleMentors = mentors[role] || [];
-
     return (
         <div className="p-10 max-w-7xl mx-auto">
-            <h1 className="text-3xl font-bold mb-2" style={{ color: '#262424' }}>Team Directory</h1>
-            <p className="mb-10" style={{ color: '#9e8e8e' }}>Your key contacts for onboarding — mentors, crew leads, and practice heads.</p>
+            <h1 className="text-3xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>Team Directory</h1>
+            <p className="mb-10" style={{ color: 'var(--text-muted)' }}>Your key contacts for onboarding — mentors, crew leads, and practice heads.</p>
 
-            {/* Practice Head */}
             {practiceHead && (
                 <div className="mb-12">
                     <SectionHeader title="Practice Head" count={1} icon="⭐" />
-                    <div className="max-w-xs">
-                        <ContactCard person={practiceHead} />
-                    </div>
+                    <div className="max-w-xs"><ContactCard person={practiceHead} /></div>
                 </div>
             )}
 
-            {/* Mentors (role-specific) */}
             {roleMentors.length > 0 && (
                 <div className="mb-12">
                     <SectionHeader title="Mentors" count={roleMentors.length} icon="🎓" />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-                        {roleMentors.map((m) => (
-                            <ContactCard key={m.email} person={m} />
-                        ))}
+                        {roleMentors.map(m => <ContactCard key={m.email} person={m} />)}
                     </div>
                 </div>
             )}
 
-            {/* Crew Leads — all three crews */}
             <div className="mb-12">
                 <SectionHeader title="Crew Leads" count={crews.reduce((a, c) => a + c.leads.length, 0)} icon="👥" />
-                <p className="text-sm mb-6 -mt-2" style={{ color: '#9e8e8e' }}>
+                <p className="text-sm mb-6 -mt-2" style={{ color: 'var(--text-muted)' }}>
                     Each crew has two leads — one in India 🇮🇳 and one in Australia 🇦🇺.
                 </p>
-                {crews.map((crew) => (
-                    <CrewSection key={crew.name} crew={crew} />
-                ))}
+                {crews.map(crew => <CrewSection key={crew.name} crew={crew} />)}
             </div>
         </div>
     );
