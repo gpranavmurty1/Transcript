@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LayoutDashboard, Map, Library, Users, Settings, LogOut, BarChart2 } from 'lucide-react';
+import { LayoutDashboard, Map, Library, Users, Settings, BarChart2, Search } from 'lucide-react';
 
 const Sidebar = ({ currentView, setView, user, onLogout }) => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -10,6 +10,7 @@ const Sidebar = ({ currentView, setView, user, onLogout }) => {
         { id: 'journey', label: 'My Journey', icon: Map },
         { id: 'resources', label: 'Resources', icon: Library },
         { id: 'team', label: 'Team Directory', icon: Users },
+        { id: 'skillfinder', label: 'Skill Finder', icon: Search },
         { id: 'skills', label: 'My Skills', icon: BarChart2 },
         { id: 'settings', label: 'Settings', icon: Settings },
     ];

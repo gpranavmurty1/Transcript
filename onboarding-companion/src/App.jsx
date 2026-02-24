@@ -16,6 +16,7 @@ import Login from './components/Login';
 import RoleSelector from './components/RoleSelector';
 import SkillsAssessment from './components/SkillsAssessment';
 import MySkills from './components/MySkills';
+import SkillDirectory from './components/SkillDirectory';
 
 function App() {
   const [firebaseUser, setFirebaseUser] = useState(null);
@@ -91,6 +92,7 @@ function App() {
       case 'resources': return <Resources role={role} />;
       case 'team': return <TeamDirectory role={role} />;
       case 'skills': return <MySkills role={role} skillRatings={skillRatings} onUpdate={updateSkillRating} />;
+      case 'skillfinder': return <SkillDirectory />;
       case 'settings': return <Settings onLogout={handleLogout} />;
       default: return <Dashboard user={user} setView={setView} milestoneProgress={milestoneProgress} role={role} />;
     }

@@ -134,7 +134,37 @@ export const getAllSkillIds = (role) => {
         skills.forEach((s) => allIds.push(`${category}::${s}`))
     );
     [coreSkills, domainSkills, aiSkills].forEach(({ category, skills }) =>
-        skills.forEach((s) => allIds.push(`${category}::${s}`))
-    );
+        skills.forEach((s) => allIds.push(`${category}::${s}`)
+        ));
     return allIds;
 };
+
+// Returns all possible skill keys across ALL roles, for the Skill Directory dropdown.
+// Each entry: { key: 'Category::SkillName', label: 'SkillName', category: 'Category' }
+export const getAllSkillKeys = () => {
+    const seen = new Set();
+    const result = [];
+
+    const add = (category, skillsList) => {
+        skillsList.forEach((s) => {
+            const key = `${category}::${s}`;
+            if (!seen.has(key)) {
+                seen.add(key);
+                result.push({ key, label: s, category });
+            }
+        });
+    };
+
+    // All role-specific skills (union across product, design, engineering)
+    Object.values(roleSkills).forEach((categories) =>
+        categories.forEach(({ category, skills }) => add(category, skills))
+    );
+
+    // Shared skill categories
+    [coreSkills, domainSkills, aiSkills].forEach(({ category, skills }) =>
+        add(category, skills)
+    );
+
+    return result;
+};
+
