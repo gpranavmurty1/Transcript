@@ -17,6 +17,8 @@ import RoleSelector from './components/RoleSelector';
 import SkillsAssessment from './components/SkillsAssessment';
 import MySkills from './components/MySkills';
 import SkillDirectory from './components/SkillDirectory';
+import GenAIQuiz from './components/GenAIQuiz';
+import { useAIQuiz } from './hooks/useAIQuiz';
 
 function App() {
   const [firebaseUser, setFirebaseUser] = useState(null);
@@ -29,6 +31,7 @@ function App() {
   // Milestone progress from Firestore
   const milestoneProgress = useMilestoneProgress(firebaseUser);
   const { skillRatings, skillsLoading, skillsCompleted, saveAssessment, updateSkillRating } = useSkillsProfile(firebaseUser);
+  const { quizData, quizLoading, saveProgress, submitQuiz, clearInProgress, isInProgressStale } = useAIQuiz(firebaseUser, role);
 
   // Listen to Firebase auth state — persists login across page refreshes
   useEffect(() => {
@@ -53,8 +56,8 @@ function App() {
     joinedAt: userData?.joinedAt || null,
   } : null;
 
-  // Loading: Firebase checking session or Firestore loading role/skills
-  if (authLoading || (firebaseUser && (profileLoading || skillsLoading))) {
+  // Loading: Firebase checking session or Firestore loading role/skills/quiz
+  if (authLoading || (firebaseUser && (profileLoading || skillsLoading || quizLoading))) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ background: '#F9EFDF' }}>
         <div className="flex flex-col items-center gap-4">
@@ -85,13 +88,28 @@ function App() {
     return <SkillsAssessment user={firebaseUser} role={role} onComplete={saveAssessment} />;
   }
 
+  // Skills done but Gen AI quiz not completed (PM only) — show mandatory quiz
+  if (role === 'product' && !quizData?.completedAt) {
+    return (
+      <GenAIQuiz
+        user={firebaseUser}
+        role={role}
+        quizData={quizData}
+        onComplete={submitQuiz}
+        saveProgress={saveProgress}
+        clearInProgress={clearInProgress}
+        isInProgressStale={isInProgressStale}
+      />
+    );
+  }
+
   const renderView = () => {
     switch (currentView) {
       case 'dashboard': return <Dashboard user={user} setView={setView} milestoneProgress={milestoneProgress} role={role} />;
       case 'journey': return <JourneyMap role={role} milestoneProgress={milestoneProgress} />;
       case 'resources': return <Resources role={role} />;
       case 'team': return <TeamDirectory role={role} />;
-      case 'skills': return <MySkills role={role} skillRatings={skillRatings} onUpdate={updateSkillRating} />;
+      case 'skills': return <MySkills role={role} skillRatings={skillRatings} onUpdate={updateSkillRating} quizData={quizData} onRetakeQuiz={() => { }} />;
       case 'skillfinder': return <SkillDirectory />;
       case 'settings': return <Settings onLogout={handleLogout} />;
       default: return <Dashboard user={user} setView={setView} milestoneProgress={milestoneProgress} role={role} />;

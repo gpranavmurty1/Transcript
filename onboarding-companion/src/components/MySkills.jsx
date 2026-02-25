@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Pencil, Check, X } from 'lucide-react';
 import { roleSkills, coreSkills, domainSkills, aiSkills, SCALE_LABELS } from '../config/skills';
+import QuizScorecard from './QuizScorecard';
 
 const ratingColor = (r) => {
     const c = { 1: '#F97070', 2: '#f5a04a', 3: '#ECA508', 4: '#d4920a', 5: '#262424' };
@@ -71,7 +72,7 @@ const CategorySection = ({ category, skills, skillRatings, onUpdate }) => {
     );
 };
 
-const MySkills = ({ role, skillRatings, onUpdate }) => {
+const MySkills = ({ role, skillRatings, onUpdate, quizData, onRetakeQuiz }) => {
     const roleLabel = { engineering: 'Engineering', product: 'Product', design: 'Design' }[role] || '';
     const roleCategories = roleSkills[role?.toLowerCase()] || [];
     const allKeys = [
@@ -115,6 +116,13 @@ const MySkills = ({ role, skillRatings, onUpdate }) => {
                 <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>AI / LLM Skills</h2>
                 <CategorySection category={aiSkills.category} skills={aiSkills.skills} skillRatings={skillRatings} onUpdate={onUpdate} />
             </div>
+            {role === 'product' && (
+                <div className="mb-8">
+                    <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--text-primary)' }}>Gen AI Proficiency Quiz</h2>
+                    <p className="text-sm mb-4" style={{ color: 'var(--text-muted)' }}>Your scenario-based AI proficiency assessment — scored across Judgment, Craft, and Critical Evaluation.</p>
+                    <QuizScorecard quizData={quizData} onRetake={onRetakeQuiz} />
+                </div>
+            )}
         </div>
     );
 };
