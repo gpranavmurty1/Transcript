@@ -31,7 +31,8 @@ function App() {
   // Milestone progress from Firestore
   const milestoneProgress = useMilestoneProgress(firebaseUser);
   const { skillRatings, skillsLoading, skillsCompleted, saveAssessment, updateSkillRating } = useSkillsProfile(firebaseUser);
-  const { quizData, quizLoading, saveProgress, submitQuiz, clearInProgress, isInProgressStale } = useAIQuiz(firebaseUser, role);
+  const { quizData, quizLoading, saveProgress, submitQuiz, clearInProgress, isInProgressStale, skipQuiz, clearSkip } = useAIQuiz(firebaseUser, role);
+  const [retakingQuiz, setRetakingQuiz] = useState(false);
 
   // Listen to Firebase auth state — persists login across page refreshes
   useEffect(() => {
@@ -89,16 +90,24 @@ function App() {
   }
 
   // Skills done but Gen AI quiz not completed (PM only) — show mandatory quiz
-  if (role === 'product' && !quizData?.completedAt) {
+  // Gate is bypassed if user has skipped (they can take it later from My Skills)
+
+  const showQuizWall = role === 'product' && (
+    (!quizData?.completedAt && !quizData?.skipped) || retakingQuiz
+  );
+  if (showQuizWall) {
+    const handleSkip = async () => { await skipQuiz(); setRetakingQuiz(false); };
+    const handleComplete = async (answers) => { await submitQuiz(answers); setRetakingQuiz(false); };
     return (
       <GenAIQuiz
         user={firebaseUser}
         role={role}
         quizData={quizData}
-        onComplete={submitQuiz}
+        onComplete={handleComplete}
         saveProgress={saveProgress}
         clearInProgress={clearInProgress}
         isInProgressStale={isInProgressStale}
+        onSkip={!quizData?.completedAt ? handleSkip : null}
       />
     );
   }
@@ -109,7 +118,7 @@ function App() {
       case 'journey': return <JourneyMap role={role} milestoneProgress={milestoneProgress} />;
       case 'resources': return <Resources role={role} />;
       case 'team': return <TeamDirectory role={role} />;
-      case 'skills': return <MySkills role={role} skillRatings={skillRatings} onUpdate={updateSkillRating} quizData={quizData} onRetakeQuiz={() => { }} />;
+      case 'skills': return <MySkills role={role} skillRatings={skillRatings} onUpdate={updateSkillRating} quizData={quizData} onRetakeQuiz={async () => { await clearSkip(); setRetakingQuiz(true); }} />;
       case 'skillfinder': return <SkillDirectory />;
       case 'settings': return <Settings onLogout={handleLogout} />;
       default: return <Dashboard user={user} setView={setView} milestoneProgress={milestoneProgress} role={role} />;

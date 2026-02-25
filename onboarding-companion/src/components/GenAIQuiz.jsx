@@ -3,7 +3,7 @@ import { Zap, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { getQuestionsForRole } from '../config/aiQuizQuestions';
 import QuizQuestion from './QuizQuestion';
 
-const GenAIQuiz = ({ user, role, quizData, onComplete, saveProgress, clearInProgress, isInProgressStale }) => {
+const GenAIQuiz = ({ user, role, quizData, onComplete, saveProgress, clearInProgress, isInProgressStale, onSkip }) => {
     const questions = getQuestionsForRole(role);
 
     // Detect stale in-progress retake and clear it on mount
@@ -146,6 +146,19 @@ const GenAIQuiz = ({ user, role, quizData, onComplete, saveProgress, clearInProg
                     <p className="text-center text-xs mt-3" style={{ color: 'var(--peach)', opacity: 0.8 }}>
                         Please select an answer to continue
                     </p>
+                )}
+
+                {/* Skip option */}
+                {!showResult && onSkip && (
+                    <div className="text-center mt-6">
+                        <button
+                            onClick={onSkip}
+                            className="text-xs transition-all hover:opacity-100"
+                            style={{ color: 'var(--text-muted)', opacity: 0.6, textDecoration: 'underline', textUnderlineOffset: '3px' }}
+                        >
+                            Skip for now — I'll take this later from My Skills
+                        </button>
+                    </div>
                 )}
             </div>
         </div>

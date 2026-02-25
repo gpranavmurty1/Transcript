@@ -14,7 +14,8 @@ export const useAIQuiz = (firebaseUser, role) => {
                 const ref = doc(db, 'users', firebaseUser.uid);
                 const snap = await getDoc(ref);
                 if (snap.exists()) {
-                    setQuizData(snap.data().aiQuiz || null);
+                    const data = snap.data();
+                    setQuizData({ ...(data.aiQuiz || {}), skipped: data.aiQuizSkipped || false });
                 }
             } catch (err) {
                 console.error('Error fetching quiz data:', err);
@@ -96,6 +97,34 @@ export const useAIQuiz = (firebaseUser, role) => {
         }
     };
 
+    // Skip the quiz — user can take it later from My Skills
+    const skipQuiz = async () => {
+        if (!firebaseUser) return;
+        try {
+            const ref = doc(db, 'users', firebaseUser.uid);
+            const snap = await getDoc(ref);
+            if (snap.exists()) {
+                await updateDoc(ref, { aiQuizSkipped: true });
+            } else {
+                await setDoc(ref, { aiQuizSkipped: true }, { merge: true });
+            }
+            setQuizData(prev => prev ? { ...prev, skipped: true } : { skipped: true });
+        } catch (err) {
+            console.error('Error skipping quiz:', err);
+        }
+    };
+
+    // Clear skipped state (when user decides to take the quiz)
+    const clearSkip = async () => {
+        if (!firebaseUser) return;
+        try {
+            const ref = doc(db, 'users', firebaseUser.uid);
+            await updateDoc(ref, { aiQuizSkipped: false });
+        } catch (err) {
+            console.error('Error clearing quiz skip:', err);
+        }
+    };
+
     // Determine if an in-progress retake is stale (>24h)
     const isInProgressStale = () => {
         if (!quizData?.inProgressStartedAt) return false;
@@ -103,5 +132,5 @@ export const useAIQuiz = (firebaseUser, role) => {
         return (Date.now() - started.getTime()) > 24 * 60 * 60 * 1000;
     };
 
-    return { quizData, quizLoading, saveProgress, submitQuiz, clearInProgress, isInProgressStale };
+    return { quizData, quizLoading, saveProgress, submitQuiz, clearInProgress, isInProgressStale, skipQuiz, clearSkip };
 };
