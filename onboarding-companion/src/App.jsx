@@ -115,7 +115,7 @@ function App() {
   const renderView = () => {
     switch (currentView) {
       case 'dashboard': return <Dashboard user={user} setView={setView} milestoneProgress={milestoneProgress} role={role} />;
-      case 'journey': return <JourneyMap role={role} milestoneProgress={milestoneProgress} />;
+      case 'journey': return <JourneyMap role={role} milestoneProgress={milestoneProgress} user={user} />;
       case 'resources': return <Resources role={role} />;
       case 'team': return <TeamDirectory role={role} />;
       case 'skills': return <MySkills role={role} skillRatings={skillRatings} onUpdate={updateSkillRating} quizData={quizData} onRetakeQuiz={async () => { await clearSkip(); setRetakingQuiz(true); }} />;
