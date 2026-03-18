@@ -11,6 +11,8 @@ export const milestones = {
             description: 'Sign in with your Everest email address and reset your temporary password immediately.',
             notionLink: null,
             category: 'Setup',
+            estimatedTime: '10 mins',
+            timeframe: 'By Day 1',
         },
         {
             id: 'enable-2fa',
@@ -19,6 +21,8 @@ export const milestones = {
             description: 'Secure your Everest account with 2FA before using any company tools.',
             notionLink: null,
             category: 'Setup',
+            estimatedTime: '5 mins',
+            timeframe: 'By Day 1',
         },
         {
             id: 'join-slack',
@@ -27,6 +31,8 @@ export const milestones = {
             description: 'Once your email is activated, you will see an invite to join our Slack channel. Accept it and introduce yourself!',
             notionLink: null,
             category: 'Communication',
+            estimatedTime: '15 mins',
+            timeframe: 'By Day 2',
         },
         {
             id: 'setup-zoom',
@@ -35,6 +41,8 @@ export const milestones = {
             description: 'For large meetings like monthly town halls, we use Zoom. Log in with your Everest email and update your profile picture.',
             notionLink: null,
             category: 'Communication',
+            estimatedTime: '10 mins',
+            timeframe: 'By Day 2',
         },
         {
             id: 'security-training',
@@ -43,6 +51,8 @@ export const milestones = {
             description: 'All new hires must complete security compliance training within the first week.',
             notionLink: null,
             category: 'Compliance',
+            estimatedTime: '45 mins',
+            timeframe: 'By end of Week 1',
         },
         {
             id: 'tool-miro',
@@ -51,6 +61,8 @@ export const milestones = {
             description: 'Miro is our primary collaboration and whiteboarding tool. Explore the workspace and join any relevant boards.',
             notionLink: null,
             category: 'Tools',
+            estimatedTime: '20 mins',
+            timeframe: 'By end of Week 2',
         },
         {
             id: 'tool-figma',
@@ -59,6 +71,8 @@ export const milestones = {
             description: 'Figma is our design tool. Get access and explore the team files relevant to your role.',
             notionLink: null,
             category: 'Tools',
+            estimatedTime: '30 mins',
+            timeframe: 'By end of Week 2',
         },
         {
             id: 'tool-antigravity',
@@ -67,6 +81,8 @@ export const milestones = {
             description: 'AntiGravity is our AI coding assistant. Set it up and explore how your team uses it.',
             notionLink: null,
             category: 'Tools',
+            estimatedTime: '45 mins',
+            timeframe: 'By end of Week 2',
         },
     ],
 
@@ -78,6 +94,8 @@ export const milestones = {
             description: 'Schedule a general introduction chat with the Engineering Crew Lead based in India.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '30 mins',
+            timeframe: 'By end of Week 2',
         },
         {
             id: 'eng-1on1-crew-australia',
@@ -86,6 +104,8 @@ export const milestones = {
             description: 'Schedule a general introduction chat with the Engineering Crew Lead based in Australia.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '30 mins',
+            timeframe: 'By end of Week 2',
         },
         {
             id: 'eng-1on1-head',
@@ -94,6 +114,8 @@ export const milestones = {
             description: 'Have a general introduction chat with the Head of Engineering.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '30 mins',
+            timeframe: 'By end of Week 2',
         },
     ],
 
@@ -105,6 +127,8 @@ export const milestones = {
             description: 'Connect with every Product Manager and Designer on your immediate team to understand their working styles.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '1 hr',
+            timeframe: 'By end of Week 2',
         },
         {
             id: 'pm-1on1-crew-india',
@@ -113,6 +137,8 @@ export const milestones = {
             description: 'Schedule a general introduction chat with the Product Crew Lead based in India.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '30 mins',
+            timeframe: 'By end of Week 2',
         },
         {
             id: 'pm-1on1-crew-australia',
@@ -121,6 +147,8 @@ export const milestones = {
             description: 'Schedule a general introduction chat with the Product Crew Lead based in Australia.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '30 mins',
+            timeframe: 'By end of Week 2',
         },
         {
             id: 'pm-1on1-head',
@@ -129,6 +157,8 @@ export const milestones = {
             description: 'Have a general introduction chat with the Head of Product Practice.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '30 mins',
+            timeframe: 'By end of Week 2',
         },
     ],
 
@@ -140,6 +170,8 @@ export const milestones = {
             description: 'Connect with every Product Manager and Designer on your immediate team to understand their working styles.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '1 hr',
+            timeframe: 'By end of Week 2',
         },
         {
             id: 'design-1on1-crew-india',
@@ -148,6 +180,8 @@ export const milestones = {
             description: 'Schedule a general introduction chat with the Design Crew Lead based in India.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '30 mins',
+            timeframe: 'By end of Week 2',
         },
         {
             id: 'design-1on1-crew-australia',
@@ -156,6 +190,8 @@ export const milestones = {
             description: 'Schedule a general introduction chat with the Design Crew Lead based in Australia.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '30 mins',
+            timeframe: 'By end of Week 2',
         },
         {
             id: 'design-1on1-head',
@@ -164,13 +200,17 @@ export const milestones = {
             description: 'Have a general introduction chat with the Head of Design Practice.',
             notionLink: null,
             category: 'Relationships',
+            estimatedTime: '30 mins',
+            timeframe: 'By end of Week 2',
         },
     ],
 };
 
 // Returns merged milestone list for a given role
+// To help filtering later, we append originalSource = 'all' | roleKey
 export const getMilestonesForRole = (role) => {
     const roleKey = role?.toLowerCase();
-    const roleMilestones = milestones[roleKey] || [];
-    return [...milestones.all, ...roleMilestones];
+    const allMilestones = milestones.all.map(m => ({ ...m, originalSource: 'all' }));
+    const roleMilestones = (milestones[roleKey] || []).map(m => ({ ...m, originalSource: roleKey }));
+    return [...allMilestones, ...roleMilestones];
 };
