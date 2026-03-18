@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Circle, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { CheckCircle2, Circle, ChevronDown, ChevronUp, ExternalLink, Clock, Calendar, AlertCircle } from 'lucide-react';
 import { getMilestonesForRole } from '../config/milestones';
 
 const categoryColors = {
@@ -10,26 +10,62 @@ const categoryColors = {
     Relationships: { color: '#9e8e8e', bg: 'rgba(158,142,142,0.08)', border: 'rgba(158,142,142,0.2)' },
 };
 
-const MilestoneCard = ({ milestone, completed, onToggle }) => {
+const isOverdue = (milestone, joinedAt) => {
+    if (!joinedAt) return false;
+    const joined = new Date(joinedAt);
+    const now = new Date();
+    const daysSince = (now - joined) / (1000 * 60 * 60 * 24);
+    if (milestone.week === 1 && daysSince > 7) return true;
+    if (milestone.week === 2 && daysSince > 14) return true;
+    return false;
+};
+
+const MilestoneCard = ({ milestone, completed, onToggle, userJoinedAt }) => {
     const [expanded, setExpanded] = useState(false);
     const cat = categoryColors[milestone.category] || { color: 'var(--text-muted)', bg: 'var(--border)', border: 'var(--border)' };
+    
+    const overdue = !completed && isOverdue(milestone, userJoinedAt);
+    const borderColor = overdue ? '#F97070' : 'var(--border)';
+
     return (
-        <div className="rounded-2xl transition-all duration-200" style={{ background: 'var(--bg-card)', border: '1px solid var(--border)', opacity: completed ? 0.55 : 1 }}
-            onMouseEnter={e => { if (!completed) e.currentTarget.style.border = '1px solid var(--border-accent)'; }}
-            onMouseLeave={e => { e.currentTarget.style.border = '1px solid var(--border)'; }}>
+        <div className="rounded-2xl transition-all duration-200" 
+             style={{ 
+                background: overdue ? 'rgba(249,112,112,0.02)' : 'var(--bg-card)', 
+                border: `1px solid ${borderColor}`, 
+                opacity: completed ? 0.55 : 1 
+             }}
+             onMouseEnter={e => { if (!completed && !overdue) e.currentTarget.style.border = '1px solid var(--border-accent)'; }}
+             onMouseLeave={e => { if (!completed && !overdue) e.currentTarget.style.border = '1px solid var(--border)'; }}>
             <div className="p-5 flex items-start gap-4">
                 <button onClick={() => onToggle(milestone.id, completed)} className="mt-0.5 shrink-0 hover:scale-110 transition-transform">
-                    {completed ? <CheckCircle2 size={22} style={{ color: 'var(--accent)' }} /> : <Circle size={22} style={{ color: 'var(--border)' }} />}
+                    {completed ? <CheckCircle2 size={22} style={{ color: 'var(--accent)' }} /> : <Circle size={22} style={{ color: overdue ? '#F97070' : 'var(--border)' }} />}
                 </button>
                 <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-3 mb-1">
-                        <h3 className="font-semibold text-base leading-snug" style={{ color: 'var(--text-primary)', textDecoration: completed ? 'line-through' : 'none', opacity: completed ? 0.7 : 1 }}>{milestone.title}</h3>
+                    <div className="flex flex-wrap items-start justify-between gap-3 mb-1">
+                        <div className="flex items-center gap-2">
+                           <h3 className="font-semibold text-base leading-snug" style={{ color: 'var(--text-primary)', textDecoration: completed ? 'line-through' : 'none', opacity: completed ? 0.7 : 1 }}>{milestone.title}</h3>
+                           {overdue && (
+                               <span className="flex items-center gap-1 text-[10px] uppercase tracking-wider font-bold px-1.5 py-0.5 rounded" style={{ color: '#F97070', background: 'rgba(249,112,112,0.1)' }}>
+                                   <AlertCircle size={10} /> Overdue
+                               </span>
+                           )}
+                        </div>
                         <span className="shrink-0 text-xs font-medium px-2.5 py-0.5 rounded-full border" style={{ color: cat.color, background: cat.bg, borderColor: cat.border }}>{milestone.category}</span>
                     </div>
-                    <button onClick={() => setExpanded(p => !p)} className="flex items-center gap-1 text-xs mt-1" style={{ color: 'var(--text-muted)' }}
+
+                    <div className="flex flex-wrap items-center gap-4 mt-2 text-xs font-medium" style={{ color: 'var(--text-muted)' }}>
+                        <div className="flex items-center gap-1.5">
+                            <Calendar size={13} /> {milestone.timeframe || `By Week ${milestone.week}`}
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            <Clock size={13} /> {milestone.estimatedTime || '15 mins'}
+                        </div>
+                    </div>
+
+                    <button onClick={() => setExpanded(p => !p)} className="flex items-center gap-1 text-xs mt-3" style={{ color: 'var(--text-muted)' }}
                         onMouseEnter={e => e.currentTarget.style.color = 'var(--accent)'}
                         onMouseLeave={e => e.currentTarget.style.color = 'var(--text-muted)'}>
-                        {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />} {expanded ? 'Less' : 'More info'}
+                        {expanded ? <ChevronUp size={12} /> : <ChevronDown size={12} />} {expanded ? 'Less info' : 'View instructions'}
                     </button>
                     {expanded && (
                         <div className="mt-3 pt-3 text-sm leading-relaxed" style={{ borderTop: '1px solid var(--border)', color: 'var(--text-subtle)' }}>
@@ -47,32 +83,48 @@ const MilestoneCard = ({ milestone, completed, onToggle }) => {
     );
 };
 
-const WeekSection = ({ week, milestones, completedMap, onToggle, progress }) => (
-    <div className="mb-10">
-        <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-                <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>Week {week}</h2>
-                <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full border"
-                    style={progress.percent === 100
-                        ? { color: 'var(--accent)', background: 'rgba(236,165,8,0.08)', borderColor: 'var(--border-accent)' }
-                        : { color: 'var(--text-muted)', background: 'var(--bg-card)', borderColor: 'var(--border)' }
-                    }>{progress.done}/{progress.total} done</span>
-            </div>
-            <div className="w-32 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
-                <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress.percent}%`, background: 'linear-gradient(to right, var(--accent), var(--peach))' }} />
-            </div>
-        </div>
-        <div className="space-y-3">
-            {milestones.map(m => <MilestoneCard key={m.id} milestone={m} completed={!!completedMap[m.id]} onToggle={onToggle} />)}
-        </div>
-    </div>
-);
+const CollapsibleSection = ({ title, milestones, completedMap, onToggle, progress, userJoinedAt }) => {
+    const [isOpen, setIsOpen] = useState(true);
+    
+    if (milestones.length === 0) return null;
 
-const JourneyMap = ({ role, milestoneProgress }) => {
+    return (
+        <div className="mb-8">
+            <button 
+               onClick={() => setIsOpen(!isOpen)}
+               className="w-full flex items-center justify-between mb-4 group text-left"
+            >
+                <div className="flex items-center gap-3">
+                    <div style={{ color: 'var(--text-muted)' }} className="transition-transform duration-200 group-hover:text-[var(--accent)]">
+                        {isOpen ? <ChevronDown size={20} /> : <ChevronUp size={20} />}
+                    </div>
+                    <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>{title}</h2>
+                    <span className="text-xs font-semibold px-2.5 py-0.5 rounded-full border transition-colors"
+                        style={progress.percent === 100
+                            ? { color: 'var(--accent)', background: 'rgba(236,165,8,0.08)', borderColor: 'var(--border-accent)' }
+                            : { color: 'var(--text-muted)', background: 'var(--bg-card)', borderColor: 'var(--border)' }
+                        }>{progress.done}/{progress.total} done</span>
+                </div>
+                <div className="w-32 h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--border)' }}>
+                    <div className="h-full rounded-full transition-all duration-500" style={{ width: `${progress.percent}%`, background: 'linear-gradient(to right, var(--accent), var(--peach))' }} />
+                </div>
+            </button>
+            <div className={`space-y-3 overflow-hidden transition-all duration-300 ${isOpen ? 'opacity-100' : 'max-h-0 opacity-0'}`}>
+                {milestones.map(m => <MilestoneCard key={m.id} milestone={m} completed={!!completedMap[m.id]} onToggle={onToggle} userJoinedAt={userJoinedAt} />)}
+            </div>
+        </div>
+    );
+};
+
+const JourneyMap = ({ role, milestoneProgress, user }) => {
     const { completedMilestones, toggleMilestone, getProgress } = milestoneProgress;
     const allMilestones = getMilestonesForRole(role);
-    const week1 = allMilestones.filter(m => m.week === 1);
-    const week2 = allMilestones.filter(m => m.week === 2);
+    
+    // Define the distinct groups as per Acceptance Criteria
+    const foundations = allMilestones.filter(m => m.week === 1 && m.originalSource === 'all');
+    const coreSystems = allMilestones.filter(m => m.week === 2 && m.originalSource === 'all');
+    const roleSpecific = allMilestones.filter(m => m.week === 2 && m.originalSource !== 'all');
+
     const overallProgress = getProgress(allMilestones);
     const roleLabel = { engineering: 'Engineering', product: 'Product', design: 'Design' }[role] || 'Your';
 
@@ -102,8 +154,10 @@ const JourneyMap = ({ role, milestoneProgress }) => {
                     </div>
                 </div>
             </div>
-            <WeekSection week={1} milestones={week1} completedMap={completedMilestones} onToggle={toggleMilestone} progress={getProgress(week1)} />
-            <WeekSection week={2} milestones={week2} completedMap={completedMilestones} onToggle={toggleMilestone} progress={getProgress(week2)} />
+            
+            <CollapsibleSection title="Week 1: Foundations" milestones={foundations} completedMap={completedMilestones} onToggle={toggleMilestone} progress={getProgress(foundations)} userJoinedAt={user?.joinedAt} />
+            <CollapsibleSection title="Week 1-2: Core Systems" milestones={coreSystems} completedMap={completedMilestones} onToggle={toggleMilestone} progress={getProgress(coreSystems)} userJoinedAt={user?.joinedAt} />
+            <CollapsibleSection title="Week 1-2: Role-Specific Training" milestones={roleSpecific} completedMap={completedMilestones} onToggle={toggleMilestone} progress={getProgress(roleSpecific)} userJoinedAt={user?.joinedAt} />
         </div>
     );
 };
