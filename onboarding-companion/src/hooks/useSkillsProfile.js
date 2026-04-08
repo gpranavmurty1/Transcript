@@ -10,6 +10,7 @@ export const useSkillsProfile = (firebaseUser) => {
     const [skillRatings, setSkillRatings] = useState({}); // { 'Category::SkillName': rating }
     const [skillsLoading, setSkillsLoading] = useState(true);
     const [skillsCompleted, setSkillsCompleted] = useState(false); // has the assessment been done?
+    const [skillsSkipped, setSkillsSkipped] = useState(false);
 
     useEffect(() => {
         if (!firebaseUser) {
@@ -23,11 +24,18 @@ export const useSkillsProfile = (firebaseUser) => {
             try {
                 const userRef = doc(db, 'users', firebaseUser.uid);
                 const snap = await getDoc(userRef);
-                if (snap.exists() && snap.data().skillsCompleted) {
-                    setSkillRatings(snap.data().skills || {});
-                    setSkillsCompleted(true);
+                if (snap.exists()) {
+                    const data = snap.data();
+                    if (data.skillsCompleted) {
+                        setSkillRatings(data.skills || {});
+                        setSkillsCompleted(true);
+                    } else {
+                        setSkillsCompleted(false);
+                    }
+                    setSkillsSkipped(data.skillsSkipped || false);
                 } else {
                     setSkillsCompleted(false);
+                    setSkillsSkipped(false);
                 }
             } catch (err) {
                 console.error('Error fetching skills:', err);
@@ -75,5 +83,17 @@ export const useSkillsProfile = (firebaseUser) => {
         }
     };
 
-    return { skillRatings, skillsLoading, skillsCompleted, saveAssessment, updateSkillRating };
+    // Skip the assessment — user can complete it later from My Skills
+    const skipAssessment = async () => {
+        if (!firebaseUser) return;
+        try {
+            const userRef = doc(db, 'users', firebaseUser.uid);
+            await setDoc(userRef, { skillsSkipped: true }, { merge: true });
+            setSkillsSkipped(true);
+        } catch (err) {
+            console.error('Error skipping assessment:', err);
+        }
+    };
+
+    return { skillRatings, skillsLoading, skillsCompleted, skillsSkipped, saveAssessment, updateSkillRating, skipAssessment };
 };

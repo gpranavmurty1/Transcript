@@ -30,7 +30,7 @@ function App() {
 
   // Milestone progress from Firestore
   const milestoneProgress = useMilestoneProgress(firebaseUser);
-  const { skillRatings, skillsLoading, skillsCompleted, saveAssessment, updateSkillRating } = useSkillsProfile(firebaseUser);
+  const { skillRatings, skillsLoading, skillsCompleted, skillsSkipped, saveAssessment, updateSkillRating, skipAssessment } = useSkillsProfile(firebaseUser);
   const { quizData, quizLoading, saveProgress, submitQuiz, clearInProgress, isInProgressStale, skipQuiz, clearSkip } = useAIQuiz(firebaseUser, role);
   const [retakingQuiz, setRetakingQuiz] = useState(false);
 
@@ -85,8 +85,8 @@ function App() {
   }
 
   // Role selected but skills not assessed yet — show mandatory assessment
-  if (!skillsCompleted) {
-    return <SkillsAssessment user={firebaseUser} role={role} onComplete={saveAssessment} />;
+  if (!skillsCompleted && !skillsSkipped) {
+    return <SkillsAssessment user={firebaseUser} role={role} onComplete={saveAssessment} onSkip={skipAssessment} />;
   }
 
   // Skills done but Gen AI quiz not completed (PM only) — show mandatory quiz

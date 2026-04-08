@@ -78,7 +78,7 @@ const isStepComplete = (step, role, ratings) => {
     return required.every(k => ratings[k] >= 1);
 };
 
-const SkillsAssessment = ({ user, role, onComplete }) => {
+const SkillsAssessment = ({ user, role, onComplete, onSkip }) => {
     const [step, setStep] = useState(0);
     const [ratings, setRatings] = useState({});
     const [saving, setSaving] = useState(false);
@@ -103,6 +103,15 @@ const SkillsAssessment = ({ user, role, onComplete }) => {
                     </div>
                     <h1 className="text-2xl font-bold mb-1" style={{ color: 'var(--text-primary)' }}>Skills Proficiency</h1>
                     <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Help us understand your background, {user?.displayName?.split(' ')[0]}. This takes ~3 minutes.</p>
+                    {onSkip && (
+                        <button
+                            onClick={onSkip}
+                            className="mt-3 text-sm font-medium transition-opacity hover:opacity-100"
+                            style={{ color: 'var(--text-muted)', opacity: 0.6 }}
+                        >
+                            Skip for now →
+                        </button>
+                    )}
                 </div>
 
                 {/* Step indicators */}
