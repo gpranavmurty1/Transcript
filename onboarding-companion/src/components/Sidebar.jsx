@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LayoutDashboard, Map, Library, Users, Settings, BarChart2, Search } from 'lucide-react';
+import { LayoutDashboard, Map, Library, Users, Settings, BarChart2, Search, LogOut } from 'lucide-react';
 
 const Sidebar = ({ currentView, setView, user, onLogout }) => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '../firebase';
 
-export default function Login({ onLogin }) {
+export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -10,9 +10,8 @@ export default function Login({ onLogin }) {
     setLoading(true);
     setError(null);
     try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const user = result.user;
-      onLogin({ name: user.displayName, email: user.email, photoURL: user.photoURL, role: 'Team Member' });
+      await signInWithPopup(auth, googleProvider);
+      // onAuthStateChanged in App.jsx will pick up the new user
     } catch (err) {
       if (err.code !== 'auth/popup-closed-by-user') setError('Sign-in failed. Please try again.');
     } finally {
